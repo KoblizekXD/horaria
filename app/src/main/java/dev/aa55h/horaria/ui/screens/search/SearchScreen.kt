@@ -45,7 +45,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navController: Na
                     LaunchedEffect(interactionSource) {
                         interactionSource.interactions.collect {
                             if (it is PressInteraction.Press) {
-                                navController.navigate("${Screen.Finder.route}/from")
+                                navController.navigate(Screen.Finder(type = "from"))
                             }
                         }
                     }
@@ -69,7 +69,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navController: Na
                     LaunchedEffect(interactionSource) {
                         interactionSource.interactions.collect {
                             if (it is PressInteraction.Press) {
-                                navController.navigate("${Screen.Finder.route}/to")
+                                navController.navigate(Screen.Finder(type = "to"))
                             }
                         }
                     }

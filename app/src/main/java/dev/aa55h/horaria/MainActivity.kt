@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 import dev.aa55h.horaria.ui.components.BottomBar
@@ -58,12 +59,11 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
             startDestination = Screen.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Home.route) { HomeScreen() }
-            composable(Screen.Search.route) { SearchScreen(navController = navController) }
-            composable(Screen.Finder.route) { FinderScreen(navController = navController) }
-            composable("${Screen.Finder.route}/{type}") { backStackEntry ->
-                val type = backStackEntry.arguments?.getString("type") ?: "from"
-                FinderScreen(navController, type)
+            composable<Screen.Home> { HomeScreen() }
+            composable<Screen.Search> { SearchScreen(navController = navController) }
+            composable<Screen.Finder> {
+                val finder = it.toRoute<Screen.Finder>()
+                FinderScreen(navController, finder.type)
             }
             // composable(Screen.Settings.route) { SettingsScreen() }
         }
