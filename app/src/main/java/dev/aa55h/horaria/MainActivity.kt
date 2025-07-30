@@ -1,6 +1,7 @@
 package dev.aa55h.horaria
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -40,8 +41,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavHost(navController: NavHostController = rememberNavController()) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = navBackStackEntry?.destination?.label
-        ?.let { label -> Screen.getScreenByLabel(label.toString()) }
+    Log.d("AppNavHost", "Current route: ${navBackStackEntry?.destination?.route}")
+    val currentScreen = Screen.getScreenByName(navBackStackEntry?.destination?.route)
 
     Scaffold(
         topBar = {
