@@ -24,7 +24,7 @@ fun BottomBar(navController: NavHostController) {
                 label = { Text(screen.label) },
                 selected = currentDestination?.route?.startsWith(screen.route) == true,
                 onClick = {
-                    navController.navigate(screen.route) {
+                    navController.navigate(screen) {
                         popUpTo(navController.graph.startDestinationId) {
                             saveState = true
                         }

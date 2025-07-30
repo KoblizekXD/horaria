@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +31,7 @@ import dev.aa55h.horaria.ui.components.TimeChip
 import dev.aa55h.horaria.ui.screens.Screen
 import dev.aa55h.horaria.ui.theme.AppTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navController: NavHostController) {
     Column(
@@ -37,6 +40,25 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navController: Na
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        if (viewModel.showPlaceSearch) {
+            SearchBar(
+                inputField = {
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = viewModel.from,
+                        onValueChange = { viewModel.from = it },
+                        placeholder = { Text(text = "From...") },
+                        trailingIcon = {
+                            Icon(painterResource(R.drawable.ic_search), contentDescription = "Search Icon")
+                        }
+                    )
+                },
+                expanded = true,
+                onExpandedChange = {}
+            ) {
+
+            }
+        }
         OutlinedTextField(
             readOnly = true,
             modifier = Modifier.fillMaxWidth(),
@@ -45,7 +67,8 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navController: Na
                     LaunchedEffect(interactionSource) {
                         interactionSource.interactions.collect {
                             if (it is PressInteraction.Press) {
-                                navController.navigate(Screen.Finder(type = "from"))
+                                // navController.navigate(Screen.Finder(type = "from"))
+                                viewModel.showPlaceSearch = true
                             }
                         }
                     }
