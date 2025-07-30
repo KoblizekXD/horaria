@@ -15,7 +15,7 @@ class SearchViewModel @Inject constructor(): ViewModel() {
     var to by mutableStateOf("")
     var date = mutableStateOf<LocalDate?>(null)
     var time = mutableStateOf<LocalTime?>(null)
-    var showPlaceSearch by mutableStateOf(false)
+    var showPlaceSearch = mutableStateOf(false)
 
     fun onSearchClicked() {
 

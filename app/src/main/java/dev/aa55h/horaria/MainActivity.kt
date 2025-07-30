@@ -16,13 +16,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 import dev.aa55h.horaria.ui.components.BottomBar
 import dev.aa55h.horaria.ui.components.GenericTopBar
 import dev.aa55h.horaria.ui.screens.Screen
-import dev.aa55h.horaria.ui.screens.finder.FinderScreen
 import dev.aa55h.horaria.ui.screens.home.HomeScreen
 import dev.aa55h.horaria.ui.screens.search.SearchScreen
 import dev.aa55h.horaria.ui.theme.AppTheme
@@ -43,7 +40,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavHost(navController: NavHostController = rememberNavController()) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = navBackStackEntry?.destination?.route?.let { Screen.getScreenByRoute(it) }
+    val currentScreen = navBackStackEntry?.destination?.label
+        ?.let { label -> Screen.getScreenByLabel(label.toString()) }
 
     Scaffold(
         topBar = {
@@ -61,10 +59,6 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
         ) {
             composable<Screen.Home> { HomeScreen() }
             composable<Screen.Search> { SearchScreen(navController = navController) }
-            composable<Screen.Finder> {
-                val finder = it.toRoute<Screen.Finder>()
-                FinderScreen(navController, finder.type)
-            }
             // composable(Screen.Settings.route) { SettingsScreen() }
         }
     }
