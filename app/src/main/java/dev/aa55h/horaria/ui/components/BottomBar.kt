@@ -11,17 +11,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dev.aa55h.horaria.ui.screens.Screen
-import dev.aa55h.horaria.ui.screens.getCurrentScreen
 import dev.aa55h.horaria.ui.theme.AppTheme
 
 @Composable
-fun BottomBar(navController: NavHostController) {
+fun BottomBar(navController: NavHostController, currentScreen: Screen = Screen.Home) {
     NavigationBar {
         Screen.bottomNavItems.forEach { screen ->
             NavigationBarItem(
                 icon = { Icon(painterResource(screen.icon), contentDescription = screen.label) },
                 label = { Text(screen.label, fontFamily = FontFamily.Default) },
-                selected = navController.getCurrentScreen() == screen,
+                selected = screen == currentScreen,
                 onClick = {
                     navController.navigate(screen) {
                         popUpTo(navController.graph.startDestinationId) {

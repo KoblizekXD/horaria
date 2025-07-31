@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,6 +29,7 @@ import dev.aa55h.horaria.ui.components.GenericTopBar
 import dev.aa55h.horaria.ui.screens.Screen
 import dev.aa55h.horaria.ui.screens.home.HomeScreen
 import dev.aa55h.horaria.ui.screens.search.SearchScreen
+import dev.aa55h.horaria.ui.screens.search.SearchViewModel
 import dev.aa55h.horaria.ui.screens.search.place.PlaceSearchScreen
 import dev.aa55h.horaria.ui.theme.AppTheme
 
@@ -47,8 +49,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavHost(navController: NavHostController = rememberNavController()) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    Log.d("AppNavHost", "Current route: ${navBackStackEntry?.destination?.route}")
     val currentScreen = Screen.getScreenByClassName(navBackStackEntry?.destination?.route)
+    Log.d("AppNavHost", "Current screen: ${navBackStackEntry?.destination?.route}")
 
     Scaffold(
         topBar = {
@@ -58,7 +60,7 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
         },
         bottomBar = {
             if (currentScreen == null || (!currentScreen.hideScaffoldBars)) {
-                BottomBar(navController)
+                BottomBar(navController, currentScreen = currentScreen ?: Screen.Home)
             }
         },
         modifier = Modifier.fillMaxSize()
@@ -73,9 +75,18 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
             popExitTransition = { slideOutHorizontally { it } + fadeOut() },
         ) {
             composable<Screen.Home> { HomeScreen() }
-            composable<Screen.Search> { SearchScreen(navController = navController) }
+            composable<Screen.Search> {
+                val route = it.toRoute<Screen.Search>()
+                SearchScreen(
+                    navController = navController,
+                    viewModel = hiltViewModel<SearchViewModel>().apply {
+                        from = it.savedStateHandle.getLiveData<String>("from").value ?: ""
+                        to = it.savedStateHandle.getLiveData<String>("to").value ?: ""
+                    }
+                )
+            }
             composable<Screen.PlaceSearch> {
-                PlaceSearchScreen(source = it.toRoute<Screen.PlaceSearch>().source)
+                PlaceSearchScreen(navController = navController, source = it.toRoute<Screen.PlaceSearch>().source)
             }
             // composable(Screen.Settings.route) { SettingsScreen() }
         }
