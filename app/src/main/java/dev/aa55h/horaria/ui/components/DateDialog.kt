@@ -24,8 +24,10 @@ fun DatePickerModal(
         onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(onClick = {
-                onConfirm(localDate(datePickerState.selectedDateMillis!!))
-                onDismiss()
+                val selectedDate = datePickerState.selectedDateMillis
+                if (selectedDate != null)
+                    onConfirm(localDate(selectedDate))
+                else onDismiss()
             }) {
                 Text("Done")
             }
