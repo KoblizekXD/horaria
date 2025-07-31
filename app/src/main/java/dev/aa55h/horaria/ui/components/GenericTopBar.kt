@@ -6,6 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import dev.aa55h.horaria.ui.theme.AppTheme
@@ -19,7 +20,7 @@ fun GenericTopBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = NavigationBarDefaults.containerColor
         ),
-        title = { Text(text = title, fontWeight = FontWeight.SemiBold) }
+        title = { Text(text = title, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.Default) }
     )
 }
 

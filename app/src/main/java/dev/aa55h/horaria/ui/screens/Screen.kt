@@ -1,6 +1,5 @@
 package dev.aa55h.horaria.ui.screens
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.navigation.NavController
 import dev.aa55h.horaria.R
@@ -15,7 +14,7 @@ sealed class Screen(val route: String, @param:DrawableRes val icon: Int, val lab
     companion object {
         val bottomNavItems = listOf(Home, Search, Library)
 
-        fun getScreenByName(name: String?): Screen? {
+        fun getScreenByClassName(name: String?): Screen? {
             if (name == null) return null
             return bottomNavItems.find { it.javaClass.name.replace('$', '.') == name }
         }
@@ -24,6 +23,5 @@ sealed class Screen(val route: String, @param:DrawableRes val icon: Int, val lab
 
 fun NavController.getCurrentScreen(): Screen? {
     val currentRoute = currentDestination?.route ?: return null
-    Log.d("NavController", "Current route: $currentRoute")
-    return Screen.getScreenByName(currentRoute)
+    return Screen.getScreenByClassName(currentRoute)
 }

@@ -5,6 +5,10 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -42,7 +46,7 @@ class MainActivity : ComponentActivity() {
 fun AppNavHost(navController: NavHostController = rememberNavController()) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     Log.d("AppNavHost", "Current route: ${navBackStackEntry?.destination?.route}")
-    val currentScreen = Screen.getScreenByName(navBackStackEntry?.destination?.route)
+    val currentScreen = Screen.getScreenByClassName(navBackStackEntry?.destination?.route)
 
     Scaffold(
         topBar = {
@@ -56,7 +60,11 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
         NavHost(
             navController = navController,
             startDestination = Screen.Home,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            enterTransition = { slideInHorizontally { it } + fadeIn() },
+            exitTransition = { slideOutHorizontally { -it } + fadeOut() },
+            popEnterTransition = { slideInHorizontally { -it } + fadeIn() },
+            popExitTransition = { slideOutHorizontally { it } + fadeOut() },
         ) {
             composable<Screen.Home> { HomeScreen() }
             composable<Screen.Search> { SearchScreen(navController = navController) }
