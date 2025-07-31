@@ -21,12 +21,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import dagger.hilt.android.AndroidEntryPoint
 import dev.aa55h.horaria.ui.components.BottomBar
 import dev.aa55h.horaria.ui.components.GenericTopBar
 import dev.aa55h.horaria.ui.screens.Screen
 import dev.aa55h.horaria.ui.screens.home.HomeScreen
 import dev.aa55h.horaria.ui.screens.search.SearchScreen
+import dev.aa55h.horaria.ui.screens.search.place.PlaceSearchScreen
 import dev.aa55h.horaria.ui.theme.AppTheme
 
 @AndroidEntryPoint
@@ -51,10 +53,14 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
     Scaffold(
         topBar = {
             currentScreen?.let {
-                GenericTopBar(it.label)
+                if (!it.hideScaffoldBars) GenericTopBar(it.label)
             }
         },
-        bottomBar = { BottomBar(navController) },
+        bottomBar = {
+            if (currentScreen == null || (!currentScreen.hideScaffoldBars)) {
+                BottomBar(navController)
+            }
+        },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         NavHost(
@@ -68,6 +74,9 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
         ) {
             composable<Screen.Home> { HomeScreen() }
             composable<Screen.Search> { SearchScreen(navController = navController) }
+            composable<Screen.PlaceSearch> {
+                PlaceSearchScreen(source = it.toRoute<Screen.PlaceSearch>().source)
+            }
             // composable(Screen.Settings.route) { SettingsScreen() }
         }
     }
