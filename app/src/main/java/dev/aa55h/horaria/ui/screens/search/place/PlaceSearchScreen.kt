@@ -1,10 +1,13 @@
 package dev.aa55h.horaria.ui.screens.search.place
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -93,57 +96,65 @@ fun PlaceSearchScreen(
         expanded = true,
         onExpandedChange = {}
     ) {
-        viewModel.results.map {
-            ListItem(
-                modifier = Modifier.semantics { isTraversalGroup = true }
-                    .clickable {
-                        handleBackPress(SearchedAndFoundPlace(
-                            name = it.name,
-                            id = it.id
-                        ))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentHeight(Alignment.Top)
+                .semantics { isTraversalGroup = true }
+                .verticalScroll(rememberScrollState())
+        ) {
+            viewModel.results.map {
+                ListItem(
+                    modifier = Modifier.semantics { isTraversalGroup = true }
+                        .clickable {
+                            handleBackPress(SearchedAndFoundPlace(
+                                name = it.name,
+                                id = it.id
+                            ))
+                        },
+                    leadingContent = {
+                        when (it.type) {
+                            SearchAutocompleteResult.Type.ADDRESS -> Icon(
+                                painter = painterResource(R.drawable.ic_location_city),
+                                contentDescription = "Address"
+                            )
+                            SearchAutocompleteResult.Type.PLACE -> Icon(
+                                painter = painterResource(R.drawable.ic_pin_drop),
+                                contentDescription = "Place"
+                            )
+                            SearchAutocompleteResult.Type.STOP -> Icon(
+                                painter = painterResource(R.drawable.ic_direction_bus),
+                                contentDescription = "Stop"
+                            )
+                        }
                     },
-                leadingContent = {
-                    when (it.type) {
-                        SearchAutocompleteResult.Type.ADDRESS -> Icon(
-                            painter = painterResource(R.drawable.ic_location_city),
-                            contentDescription = "Address"
-                        )
-                        SearchAutocompleteResult.Type.PLACE -> Icon(
-                            painter = painterResource(R.drawable.ic_pin_drop),
-                            contentDescription = "Place"
-                        )
-                        SearchAutocompleteResult.Type.STOP -> Icon(
-                            painter = painterResource(R.drawable.ic_direction_bus),
-                            contentDescription = "Stop"
+                    headlineContent = {
+                        Text(text = it.name)
+                    },
+                    supportingContent = {
+                        Text(
+                            text = when (it.type) {
+                                SearchAutocompleteResult.Type.ADDRESS -> buildString {
+                                    append(it.street)
+                                    if (it.houseNumber.isNotEmpty()) append(" ${it.houseNumber}")
+                                    if (it.zip.isNotEmpty()) append(", ${it.zip}")
+                                    it.areas.subList(0, 1).forEachIndexed { index, area ->
+                                        append(area.name)
+                                        if (index < it.areas.size - 1) append(", ")
+                                    }
+                                }
+                                SearchAutocompleteResult.Type.PLACE,
+                                SearchAutocompleteResult.Type.STOP -> buildString {
+                                    it.areas.subList(0, 3).forEachIndexed { index, area ->
+                                        append(area.name)
+                                        if (index < 2) append(", ")
+                                    }
+                                }
+                            }
                         )
                     }
-                },
-                headlineContent = {
-                    Text(text = it.name)
-                },
-                supportingContent = {
-                    Text(
-                        text = when (it.type) {
-                            SearchAutocompleteResult.Type.ADDRESS -> buildString {
-                                append(it.street)
-                                if (it.houseNumber.isNotEmpty()) append(" ${it.houseNumber}")
-                                if (it.zip.isNotEmpty()) append(", ${it.zip}")
-                                it.areas.subList(0, 1).forEachIndexed { index, area ->
-                                    append(area.name)
-                                    if (index < it.areas.size - 1) append(", ")
-                                }
-                            }
-                            SearchAutocompleteResult.Type.PLACE,
-                            SearchAutocompleteResult.Type.STOP -> buildString {
-                                it.areas.subList(0, 3).forEachIndexed { index, area ->
-                                    append(area.name)
-                                    if (index < 2) append(", ")
-                                }
-                            }
-                        }
-                    )
-                }
-            )
+                )
+            }
         }
     }
 }
