@@ -30,6 +30,7 @@ import dev.aa55h.horaria.ui.components.BottomBar
 import dev.aa55h.horaria.ui.components.GenericTopBar
 import dev.aa55h.horaria.ui.screens.Screen
 import dev.aa55h.horaria.ui.screens.home.HomeScreen
+import dev.aa55h.horaria.ui.screens.results.SearchResultsScreen
 import dev.aa55h.horaria.ui.screens.search.SearchScreen
 import dev.aa55h.horaria.ui.screens.search.SearchViewModel
 import dev.aa55h.horaria.ui.screens.search.SearchedAndFoundPlace
@@ -98,6 +99,14 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
                 popExitTransition = { slideOutVertically { it } + fadeOut() }
             ) {
                 PlaceSearchScreen(navController = navController, source = it.toRoute<Screen.PlaceSearch>().source)
+            }
+            composable<Screen.SearchResults>(
+                enterTransition = { slideInVertically { it } + fadeIn() },
+                exitTransition = { slideOutVertically { -it } + fadeOut() },
+                popEnterTransition = { slideInVertically { -it } + fadeIn() },
+                popExitTransition = { slideOutVertically { it } + fadeOut() }
+            ) {
+                SearchResultsScreen()
             }
             // composable(Screen.Settings.route) { SettingsScreen() }
         }

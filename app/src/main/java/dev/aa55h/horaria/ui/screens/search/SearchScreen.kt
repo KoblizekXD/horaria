@@ -99,7 +99,9 @@ fun SearchScreen(
                 TimeChip(viewModel.time)
             }
             Spacer(modifier = Modifier.weight(1f))
-            Button(onClick = { }, modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = {
+                navController.navigate(Screen.SearchResults)
+            }, modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Search")
             }
         }

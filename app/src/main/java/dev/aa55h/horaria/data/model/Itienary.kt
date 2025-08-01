@@ -2,6 +2,8 @@
 
 package dev.aa55h.horaria.data.model
 
+import dev.aa55h.horaria.R
+
 /**
  * Represents a full journey itinerary, composed of multiple legs and timing details.
  */
@@ -9,7 +11,7 @@ data class Itinerary(
     /**
      * Journey duration in seconds.
      */
-    val duration: Int,
+    val duration: Long,
 
     /**
      * Journey departure time.
@@ -88,7 +90,7 @@ data class Leg(
      * `additionalTransferTime = 0` in case they are not explicitly
      * provided in the query.
      */
-    val duration: Int,
+    val duration: Long,
 
     /**
      * Starting place of the leg.
@@ -449,7 +451,55 @@ enum class Mode {
     AREAL_LIFT,
 
     /** Other/unspecified mode */
-    OTHER
+    OTHER;
+
+    fun pretty(): String {
+        return when (this) {
+            WALK -> "Walk"
+            BIKE -> "Bike"
+            RENTAL -> "Rental Vehicle"
+            CAR -> "Car"
+            CAR_PARKING -> "Car Parking"
+            CAR_DROPOFF -> "Car Dropoff"
+            ODM -> "On-Demand Mobility"
+            FLEX -> "Flexible Transport"
+            TRANSIT -> "Transit"
+            TRAM -> "Tram"
+            SUBWAY -> "Subway"
+            FERRY -> "Ferry"
+            AIRPLANE -> "Airplane"
+            METRO -> "Metro"
+            BUS -> "Bus"
+            COACH -> "Coach"
+            RAIL -> "Rail"
+            HIGHSPEED_RAIL -> "High-Speed Rail"
+            LONG_DISTANCE -> "Long-Distance Rail"
+            NIGHT_RAIL -> "Night Rail"
+            REGIONAL_FAST_RAIL -> "Regional Fast Rail"
+            REGIONAL_RAIL -> "Regional Rail"
+            CABLE_CAR -> "Cable Car"
+            FUNICULAR -> "Funicular"
+            AREAL_LIFT -> "Aerial Lift"
+            OTHER -> "Other Transport Mode"
+        }
+    }
+
+    fun icon(): Int {
+        return when (this) {
+            WALK -> R.drawable.ic_direction_walk
+            CAR -> R.drawable.ic_direction_car
+            TRAM -> R.drawable.ic_direction_tram
+            SUBWAY -> R.drawable.ic_direction_subway
+            METRO -> R.drawable.ic_direction_subway
+            BUS -> R.drawable.ic_direction_bus
+            COACH -> R.drawable.ic_direction_bus
+            NIGHT_RAIL, RAIL -> R.drawable.ic_train
+            REGIONAL_FAST_RAIL,
+            REGIONAL_RAIL,
+            HIGHSPEED_RAIL -> R.drawable.ic_direction_railway
+            else -> R.drawable.ic_direction
+        }
+    }
 }
 
 /**
