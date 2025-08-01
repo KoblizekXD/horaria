@@ -8,7 +8,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -30,6 +32,7 @@ import dev.aa55h.horaria.ui.screens.Screen
 import dev.aa55h.horaria.ui.screens.home.HomeScreen
 import dev.aa55h.horaria.ui.screens.search.SearchScreen
 import dev.aa55h.horaria.ui.screens.search.SearchViewModel
+import dev.aa55h.horaria.ui.screens.search.SearchedAndFoundPlace
 import dev.aa55h.horaria.ui.screens.search.place.PlaceSearchScreen
 import dev.aa55h.horaria.ui.theme.AppTheme
 
@@ -76,16 +79,20 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
         ) {
             composable<Screen.Home> { HomeScreen() }
             composable<Screen.Search> {
-                val route = it.toRoute<Screen.Search>()
                 SearchScreen(
                     navController = navController,
                     viewModel = hiltViewModel<SearchViewModel>().apply {
-                        from = it.savedStateHandle.getLiveData<String>("from").value ?: ""
-                        to = it.savedStateHandle.getLiveData<String>("to").value ?: ""
+                        from = it.savedStateHandle.getLiveData<SearchedAndFoundPlace?>("from", null).value
+                        to = it.savedStateHandle.getLiveData<SearchedAndFoundPlace?>("to", null).value
                     }
                 )
             }
-            composable<Screen.PlaceSearch> {
+            composable<Screen.PlaceSearch>(
+                enterTransition = { slideInVertically { it } + fadeIn() },
+                exitTransition = { slideOutVertically { -it } + fadeOut() },
+                popEnterTransition = { slideInVertically { -it } + fadeIn() },
+                popExitTransition = { slideOutVertically { it } + fadeOut() }
+            ) {
                 PlaceSearchScreen(navController = navController, source = it.toRoute<Screen.PlaceSearch>().source)
             }
             // composable(Screen.Settings.route) { SettingsScreen() }

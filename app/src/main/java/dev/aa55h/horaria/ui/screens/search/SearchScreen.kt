@@ -65,7 +65,7 @@ fun SearchScreen(
                 placeholder = {
                     Text(text = "From...")
                 },
-                value = viewModel.from,
+                value = viewModel.from?.name ?: "",
                 trailingIcon = {
                     Icon(painterResource(R.drawable.ic_search), contentDescription = "Search Icon")
                 },
@@ -86,7 +86,7 @@ fun SearchScreen(
                             }
                         }
                     },
-                value = viewModel.to,
+                value = viewModel.to?.name ?: "",
                 trailingIcon = {
                     Icon(painterResource(R.drawable.ic_search), contentDescription = "Search Icon")
                 },

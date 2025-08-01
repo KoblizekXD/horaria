@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import dev.aa55h.horaria.R
 import dev.aa55h.horaria.data.model.SearchAutocompleteResult
+import dev.aa55h.horaria.ui.screens.search.SearchedAndFoundPlace
 
 enum class PlaceSearchSource {
     FROM,
@@ -49,7 +50,7 @@ fun PlaceSearchScreen(
         focusRequester.requestFocus()
     }
 
-    fun handleBackPress(result: String) {
+    fun handleBackPress(result: SearchedAndFoundPlace) {
         when (source) {
             PlaceSearchSource.FROM -> navController.previousBackStackEntry?.savedStateHandle?.set("from", result)
             PlaceSearchSource.TO -> navController.previousBackStackEntry?.savedStateHandle?.set("to", result)
@@ -96,7 +97,10 @@ fun PlaceSearchScreen(
             ListItem(
                 modifier = Modifier.semantics { isTraversalGroup = true }
                     .clickable {
-                        handleBackPress(it.name)
+                        handleBackPress(SearchedAndFoundPlace(
+                            name = it.name,
+                            id = it.id
+                        ))
                     },
                 leadingContent = {
                     when (it.type) {
