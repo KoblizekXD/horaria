@@ -6,19 +6,25 @@ import dev.aa55h.horaria.ui.screens.search.place.PlaceSearchSource
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class Screen(@param:DrawableRes val icon: Int, val label: String, val hideScaffoldBars: Boolean = false) {
-    @Serializable data object Home : Screen(R.drawable.ic_home, "Home")
-    @Serializable data object Search : Screen(R.drawable.ic_search, "Search")
-    @Serializable data object Library : Screen(R.drawable.ic_library_books, "Library")
-    @Serializable data class PlaceSearch(val source: PlaceSearchSource) : Screen(R.drawable.ic_search, "Place Search", hideScaffoldBars = true)
+sealed class Screen(
+    val label: String,
+    @param:DrawableRes val icon: Int? = null,
+    val hideScaffoldBars: Boolean = false,
+    val topBarBackArrow: Boolean = false
+) {
+    @Serializable data object Home : Screen("Home", R.drawable.ic_home)
+    @Serializable data object Search : Screen("Search", R.drawable.ic_search)
+    @Serializable data object Library : Screen("Library", R.drawable.ic_library_books)
+    @Serializable data class PlaceSearch(val source: PlaceSearchSource = PlaceSearchSource.GENERIC) : Screen("Place Search", hideScaffoldBars = true)
+    @Serializable data object SearchResults : Screen("Search Results")
 
     companion object {
         val bottomNavItems = listOf(Home, Search, Library)
-        val allScreens = bottomNavItems + PlaceSearch
+        val allScreens = bottomNavItems + PlaceSearch() + SearchResults
 
         fun getScreenByClassName(name: String?): Screen? {
             if (name == null) return null
-            return allScreens.find { name.startsWith(it.javaClass.name.replace('$', '.')) } as Screen?
+            return allScreens.find { name.startsWith(it.javaClass.name.replace('$', '.')) }
         }
     }
 }

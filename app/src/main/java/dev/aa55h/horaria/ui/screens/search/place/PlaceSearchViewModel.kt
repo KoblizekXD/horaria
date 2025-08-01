@@ -31,7 +31,7 @@ class PlaceSearchViewModel @Inject constructor(
         debounceJob = viewModelScope.launch {
             delay(500)
             if (value.isNotEmpty()) {
-                results = transitousRepository.searchFor(value)
+                results = transitousRepository.autocompleteSearch(value)
                 Log.d("SearchViewModel", "Results for '$value': ${results.size} items")
             }
         }

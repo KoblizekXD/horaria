@@ -18,7 +18,11 @@ fun BottomBar(navController: NavHostController, currentScreen: Screen = Screen.H
     NavigationBar {
         Screen.bottomNavItems.forEach { screen ->
             NavigationBarItem(
-                icon = { Icon(painterResource(screen.icon), contentDescription = screen.label) },
+                icon = {
+                    screen.icon?.let {
+                        Icon(painterResource(it), contentDescription = screen.label)
+                    }
+                },
                 label = { Text(screen.label, fontFamily = FontFamily.Default) },
                 selected = screen == currentScreen,
                 onClick = {

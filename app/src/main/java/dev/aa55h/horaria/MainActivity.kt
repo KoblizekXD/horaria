@@ -58,7 +58,11 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
     Scaffold(
         topBar = {
             currentScreen?.let {
-                if (!it.hideScaffoldBars) GenericTopBar(it.label)
+                if (!it.hideScaffoldBars) GenericTopBar(
+                    title = it.label,
+                    navController = navController,
+                    displayBackArrow = it.topBarBackArrow
+                )
             }
         },
         bottomBar = {
