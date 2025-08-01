@@ -27,11 +27,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dev.aa55h.horaria.R
+import dev.aa55h.horaria.data.model.SearchQuery
 import dev.aa55h.horaria.ui.components.DateChip
 import dev.aa55h.horaria.ui.components.TimeChip
 import dev.aa55h.horaria.ui.screens.Screen
 import dev.aa55h.horaria.ui.screens.search.place.PlaceSearchSource
 import dev.aa55h.horaria.ui.theme.AppTheme
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,7 +102,13 @@ fun SearchScreen(
             }
             Spacer(modifier = Modifier.weight(1f))
             Button(onClick = {
-                navController.navigate(Screen.SearchResults)
+                navController.navigate(Screen.SearchResults(
+                    SearchQuery(
+                        from = viewModel.from,
+                        to = viewModel.to,
+                        dateTime = "${viewModel.date.value?.toString()} ${viewModel.time.value?.toString() ?: LocalDateTime.now().toLocalTime()}"
+                    )
+                ))
             }, modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Search")
             }

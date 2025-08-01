@@ -33,7 +33,6 @@ import dev.aa55h.horaria.ui.screens.home.HomeScreen
 import dev.aa55h.horaria.ui.screens.results.SearchResultsScreen
 import dev.aa55h.horaria.ui.screens.search.SearchScreen
 import dev.aa55h.horaria.ui.screens.search.SearchViewModel
-import dev.aa55h.horaria.ui.screens.search.SearchedAndFoundPlace
 import dev.aa55h.horaria.ui.screens.search.place.PlaceSearchScreen
 import dev.aa55h.horaria.ui.theme.AppTheme
 
@@ -87,8 +86,8 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
                 SearchScreen(
                     navController = navController,
                     viewModel = hiltViewModel<SearchViewModel>().apply {
-                        from = it.savedStateHandle.getLiveData<SearchedAndFoundPlace?>("from", null).value
-                        to = it.savedStateHandle.getLiveData<SearchedAndFoundPlace?>("to", null).value
+                        // from = it.savedStateHandle.getLiveData<SearchedAndFoundPlace?>("from", null).value
+                        // to = it.savedStateHandle.getLiveData<SearchedAndFoundPlace?>("to", null).value
                     }
                 )
             }
@@ -106,7 +105,8 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
                 popEnterTransition = { slideInVertically { -it } + fadeIn() },
                 popExitTransition = { slideOutVertically { it } + fadeOut() }
             ) {
-                SearchResultsScreen()
+                val route = it.toRoute<Screen.SearchResults>()
+                SearchResultsScreen(searchQuery = route.searchQuery)
             }
             // composable(Screen.Settings.route) { SettingsScreen() }
         }
