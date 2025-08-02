@@ -26,9 +26,9 @@ import cafe.adriel.voyager.hilt.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.aa55h.horaria.R
-import dev.aa55h.horaria.data.model.SearchAutocompleteResult
 import dev.aa55h.horaria.data.model.SearchScreenSource
 import dev.aa55h.horaria.data.model.SimplePlaceDefinition
+import dev.aa55h.horaria.data.model.Type
 import dev.aa55h.horaria.utils.VoyagerResultExtension
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -104,7 +104,7 @@ class PlaceSearchScreen(
                         supportingContent = {
                             Text(
                                 text = when (item.type) {
-                                    SearchAutocompleteResult.Type.ADDRESS -> buildString {
+                                    Type.ADDRESS -> buildString {
                                         append(item.street)
                                         if (item.houseNumber.isNotEmpty()) append(" ${item.houseNumber}")
                                         if (item.zip.isNotEmpty()) append(", ${item.zip}")
@@ -113,8 +113,8 @@ class PlaceSearchScreen(
                                             if (index < item.areas.size - 1) append(", ")
                                         }
                                     }
-                                    SearchAutocompleteResult.Type.PLACE,
-                                    SearchAutocompleteResult.Type.STOP -> buildString {
+                                    Type.PLACE,
+                                    Type.STOP -> buildString {
                                         item.areas.take(3).forEachIndexed { index, area ->
                                             append(area.name)
                                             if (index < 2) append(", ")

@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import dev.aa55h.horaria.data.model.SearchAutocompleteResult
+import dev.aa55h.horaria.data.model.Match
 import dev.aa55h.horaria.data.repository.TransitousRepository
 import jakarta.inject.Inject
 import kotlinx.coroutines.Job
@@ -17,7 +17,7 @@ class PlaceSearchScreenModel @Inject constructor(
     val transitousRepository: TransitousRepository
 ): ScreenModel {
     var query by mutableStateOf("")
-    val results = mutableStateListOf<SearchAutocompleteResult>()
+    val results = mutableStateListOf<Match>()
 
     var debounceJob: Job? = null
         private set

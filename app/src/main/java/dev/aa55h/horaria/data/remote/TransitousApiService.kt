@@ -1,7 +1,8 @@
 package dev.aa55h.horaria.data.remote
 
+import dev.aa55h.horaria.data.model.Match
 import dev.aa55h.horaria.data.model.RoutingResponse
-import dev.aa55h.horaria.data.model.SearchAutocompleteResult
+import dev.aa55h.horaria.data.model.Type
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,10 +11,10 @@ interface TransitousApiService {
     suspend fun getGeocode(
         @Query("text") text: String,
         @Query("language") language: String? = null,
-        @Query("type") type: SearchAutocompleteResult.Type? = null,
+        @Query("type") type: Type? = null,
         @Query("place") place: String? = null,
         @Query("placeBias") placeBias: Float? = null
-    ): List<SearchAutocompleteResult>
+    ): List<Match>
 
     @GET("api/v3/plan")
     suspend fun getOptimalConnections(
