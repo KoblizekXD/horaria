@@ -148,13 +148,15 @@ fun ItineraryCard(
                             modifier = Modifier.size(16.dp)
                         )
                         Text(text = leg.mode.pretty(), fontSize = 14.sp)
-                        if ((leg.distance ?: 0.0) > 0.0) {
-                            Text(
-                                text = "${leg.distance?.toInt()} m (${formatDuration(leg.duration)})",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
+                        "${leg.distance?.toInt()}m (${formatDuration(leg.duration)})"
+                        Text(
+                            text = buildString {
+                                if (leg.distance != null) append("${leg.distance.toInt()}m ")
+                                append("(${formatDuration(leg.duration)})")
+                            },
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                     if (index == itinerary.legs.lastIndex) {
                         Row(
@@ -261,7 +263,7 @@ fun formatDuration(totalSeconds: Long): String {
         if (days > 0) append("${days}d ")
         if (hours > 0 || days > 0) append("${hours}h ")
         if (minutes > 0 || hours > 0 || days > 0) append("${minutes}m ")
-        append("${seconds}s")
+        if (seconds > 0 || minutes > 0 || hours > 0 || days > 0) append("${seconds}s")
     }.trim()
 }
 

@@ -1,6 +1,7 @@
 package dev.aa55h.horaria.ui.screens
 
 import cafe.adriel.voyager.core.screen.Screen
+import dev.aa55h.horaria.R
 import dev.aa55h.horaria.ui.screens.home.HomeScreen
 import dev.aa55h.horaria.ui.screens.search.SearchScreen
 import dev.aa55h.horaria.ui.screens.search.place.PlaceSearchScreen
@@ -14,8 +15,8 @@ enum class ScreenDetails(
     val showTopBar: Boolean = true,
     val showBottomBar: Boolean = true,
 ) {
-    HOME(HomeScreen::class, "Home"),
-    SEARCH(SearchScreen::class, "Search"),
+    HOME(HomeScreen::class, "Home", icon = R.drawable.ic_home),
+    SEARCH(SearchScreen::class, "Search", icon = R.drawable.ic_search),
     PLACE_SEARCH(PlaceSearchScreen::class, "Search", showTopBar = false, showBottomBar = false),
     SEARCH_RESULT(SearchResultScreen::class, "Search Results", showTopBar = false);
 

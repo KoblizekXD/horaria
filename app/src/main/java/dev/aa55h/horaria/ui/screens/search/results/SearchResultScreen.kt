@@ -65,7 +65,7 @@ class SearchResultScreen(
             item {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(12.dp, 0.dp, 12.dp, 48.dp),
+                    modifier = Modifier.padding(4.dp, 0.dp, 12.dp, 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
