@@ -1,13 +1,10 @@
 package dev.aa55h.horaria.ui.screens.search.place
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,141 +16,115 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.isTraversalGroup
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.hilt.getScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.aa55h.horaria.R
-import dev.aa55h.horaria.data.model.SearchAutocompleteResult
-import dev.aa55h.horaria.ui.screens.search.SearchedAndFoundPlace
-
-enum class PlaceSearchSource {
-    FROM,
-    TO,
-    GENERIC
-}
+import dev.aa55h.horaria.data.model.SearchScreenSource
+import dev.aa55h.horaria.data.model.SimplePlaceDefinition
+import dev.aa55h.horaria.data.model.Type
+import dev.aa55h.horaria.utils.VoyagerResultExtension
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PlaceSearchScreen(
-    navController: NavHostController,
-    modifier: Modifier = Modifier,
-    viewModel: PlaceSearchViewModel = hiltViewModel(),
-    source: PlaceSearchSource = PlaceSearchSource.GENERIC
-) {
-    val focusRequester = remember { FocusRequester() }
+class PlaceSearchScreen(
+    private val type: SearchScreenSource,
+    private val navigatorExtension: VoyagerResultExtension
+): Screen {
+    @Composable
+    override fun Content() {
+        val screenModel = getScreenModel<PlaceSearchScreenModel>()
+        val focusRequester = remember { FocusRequester() }
+        val navigator = LocalNavigator.currentOrThrow
 
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-
-    fun handleBackPress(result: SearchedAndFoundPlace) {
-        when (source) {
-            PlaceSearchSource.FROM -> navController.previousBackStackEntry?.savedStateHandle?.set("from", result)
-            PlaceSearchSource.TO -> navController.previousBackStackEntry?.savedStateHandle?.set("to", result)
-            PlaceSearchSource.GENERIC -> {}
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
         }
-        navController.popBackStack()
-    }
 
-    SearchBar(
-        windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .consumeWindowInsets(WindowInsets(0.dp, 0.dp, 0.dp, 0.dp))
-            .wrapContentHeight(Alignment.Top)
-            .then(modifier),
-        colors = SearchBarDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.background,
-        ),
-        inputField = {
-            SearchBarDefaults.InputField(
-                modifier = Modifier.focusRequester(focusRequester),
-                query = viewModel.value,
-                onQueryChange = {
-                    viewModel.value = it
-                    viewModel.placeSearchQueryChange(it)
-                },
-                onSearch = {},
-                leadingIcon = {
-                    IconButton({
-                        navController.popBackStack()
-                    }) {
-                        Icon(painterResource(R.drawable.ic_arrow_back), "Back")
-                    }
-                },
-                expanded = true,
-                onExpandedChange = { },
-                placeholder = { Text("Search...") },
-            )
-        },
-        expanded = true,
-        onExpandedChange = {}
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentHeight(Alignment.Top)
-                .semantics { isTraversalGroup = true }
-                .verticalScroll(rememberScrollState())
-        ) {
-            viewModel.results.map {
-                ListItem(
-                    modifier = Modifier.semantics { isTraversalGroup = true }
-                        .clickable {
-                            handleBackPress(SearchedAndFoundPlace(
-                                name = it.name,
-                                id = it.id
-                            ))
-                        },
-                    leadingContent = {
-                        when (it.type) {
-                            SearchAutocompleteResult.Type.ADDRESS -> Icon(
-                                painter = painterResource(R.drawable.ic_location_city),
-                                contentDescription = "Address"
-                            )
-                            SearchAutocompleteResult.Type.PLACE -> Icon(
-                                painter = painterResource(R.drawable.ic_pin_drop),
-                                contentDescription = "Place"
-                            )
-                            SearchAutocompleteResult.Type.STOP -> Icon(
-                                painter = painterResource(R.drawable.ic_direction_bus),
-                                contentDescription = "Stop"
-                            )
+        SearchBar(
+            windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
+            modifier = Modifier.consumeWindowInsets(WindowInsets(0.dp, 0.dp, 0.dp, 0.dp)),
+            colors = SearchBarDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.background,
+            ),
+            expanded = true,
+            inputField = {
+                SearchBarDefaults.InputField(
+                    modifier = Modifier.focusRequester(focusRequester),
+                    query = screenModel.query,
+                    onQueryChange = { screenModel.onQueryChange(it) },
+                    leadingIcon = {
+                        IconButton({
+                            navigator.pop()
+                        }) {
+                            Icon(painterResource(R.drawable.ic_arrow_back), "Back")
                         }
                     },
-                    headlineContent = {
-                        Text(text = it.name)
-                    },
-                    supportingContent = {
-                        Text(
-                            text = when (it.type) {
-                                SearchAutocompleteResult.Type.ADDRESS -> buildString {
-                                    append(it.street)
-                                    if (it.houseNumber.isNotEmpty()) append(" ${it.houseNumber}")
-                                    if (it.zip.isNotEmpty()) append(", ${it.zip}")
-                                    it.areas.subList(0, 1).forEachIndexed { index, area ->
-                                        append(area.name)
-                                        if (index < it.areas.size - 1) append(", ")
-                                    }
-                                }
-                                SearchAutocompleteResult.Type.PLACE,
-                                SearchAutocompleteResult.Type.STOP -> buildString {
-                                    it.areas.subList(0, 3).forEachIndexed { index, area ->
-                                        append(area.name)
-                                        if (index < 2) append(", ")
-                                    }
-                                }
+                    trailingIcon = {
+                        if (screenModel.query.isNotEmpty()) {
+                            IconButton({
+                                screenModel.onQueryChange("")
+                            }) {
+                                Icon(painterResource(R.drawable.ic_close), "Clear")
                             }
-                        )
-                    }
+                        }
+                    },
+                    placeholder = {
+                        Text("I really want to find...")
+                    },
+                    onSearch = {},
+                    expanded = true,
+                    onExpandedChange = {}
                 )
+            },
+            onExpandedChange = {}
+        ) {
+            LazyColumn {
+                items(screenModel.results) { item ->
+                    ListItem(
+                        modifier = Modifier.clickable {
+                            navigatorExtension.setResult("SearchScreen", SimplePlaceDefinition(
+                                id = item.id,
+                                name = item.name,
+                                source = type
+                            ))
+                            navigator.pop()
+                        },
+                        headlineContent = {
+                            Text(item.name)
+                        },
+                        leadingContent = {
+                            Icon(painter = painterResource(item.type.icon()), contentDescription = item.type.toString())
+                        },
+                        supportingContent = {
+                            Text(
+                                text = when (item.type) {
+                                    Type.ADDRESS -> buildString {
+                                        append(item.street)
+                                        if (item.houseNumber.isNotEmpty()) append(" ${item.houseNumber}")
+                                        if (item.zip.isNotEmpty()) append(", ${item.zip}")
+                                        item.areas.subList(0, 1).forEachIndexed { index, area ->
+                                            append(area.name)
+                                            if (index < item.areas.size - 1) append(", ")
+                                        }
+                                    }
+                                    Type.PLACE,
+                                    Type.STOP -> buildString {
+                                        item.areas.take(3).forEachIndexed { index, area ->
+                                            append(area.name)
+                                            if (index < 2) append(", ")
+                                        }
+                                    }
+                                }
+                            )
+                        },
+                    )
+                }
             }
         }
     }

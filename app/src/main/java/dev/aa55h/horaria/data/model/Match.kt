@@ -1,6 +1,6 @@
 package dev.aa55h.horaria.data.model
 
-data class SearchAutocompleteResult(
+data class Match(
     val type: Type,
     val tokens: List<List<Int>>,
     val name: String,
@@ -14,11 +14,6 @@ data class SearchAutocompleteResult(
     val areas: List<Area> = emptyList(),
     val score: Float = 0.0f,
 ) {
-    enum class Type {
-        ADDRESS,
-        PLACE,
-        STOP,
-    }
 
     data class Area(
         val name: String,

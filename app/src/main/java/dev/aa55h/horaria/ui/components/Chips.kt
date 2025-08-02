@@ -4,10 +4,8 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import dev.aa55h.horaria.R
 import dev.aa55h.horaria.utils.formatted
@@ -15,7 +13,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @Composable
-fun TimeChip(setTime: MutableState<LocalTime?>) {
+fun TimeChip(onConfirm: (LocalTime) -> Unit, time: LocalTime?) {
     val showTime = remember { mutableStateOf(false) }
     AssistChip(
         onClick = {
@@ -28,7 +26,7 @@ fun TimeChip(setTime: MutableState<LocalTime?>) {
             )
         },
         label = {
-            Text(if (setTime.value == null) "Select Time" else setTime.value.toString())
+            Text(time?.toString() ?: "Select Time")
         }
     )
     if (showTime.value) {
@@ -36,8 +34,8 @@ fun TimeChip(setTime: MutableState<LocalTime?>) {
             onDismiss = {
                 showTime.value = false
             },
-            onConfirm = { date ->
-                setTime.value = date
+            onConfirm = { time ->
+                onConfirm(time)
                 showTime.value = false
             }
         )
@@ -45,7 +43,7 @@ fun TimeChip(setTime: MutableState<LocalTime?>) {
 }
 
 @Composable
-fun DateChip(setDate: MutableState<LocalDate?>) {
+fun DateChip(onConfirm: (LocalDate) -> Unit, date: LocalDate?) {
     val showDate = remember { mutableStateOf(false) }
     AssistChip(
         onClick = {
@@ -58,7 +56,7 @@ fun DateChip(setDate: MutableState<LocalDate?>) {
             )
         },
         label = {
-            Text(if (setDate.value == null) "Select Date" else setDate.value?.formatted()!!)
+            Text(if (date == null) "Select Date" else date.formatted()!!)
         }
     )
     if (showDate.value) {
@@ -67,7 +65,7 @@ fun DateChip(setDate: MutableState<LocalDate?>) {
                 showDate.value = false
             },
             onConfirm = { date ->
-                setDate.value = date
+                onConfirm(date)
                 showDate.value = false
             }
         )
