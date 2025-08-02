@@ -41,20 +41,27 @@ import dev.aa55h.horaria.data.model.Mode
 import dev.aa55h.horaria.data.model.Place
 import dev.aa55h.horaria.ui.theme.AppTheme
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter.ofPattern
 
 @Composable
-fun ItineraryCard(itinerary: Itinerary, modifier: Modifier = Modifier) {
+fun ItineraryCard(
+    itinerary: Itinerary,
+    start: String,
+    end: String,
+    modifier: Modifier = Modifier
+) {
     var expanded by remember { mutableStateOf(false) }
 
     Card {
         Column(
-            modifier = Modifier.padding(12.dp).then(modifier)
-                .clickable { expanded = !expanded },
+            modifier = Modifier.clickable { expanded = !expanded }
+                .padding(12.dp).then(modifier)
         ) {
             Text(
-                text = "${itinerary.startTime.toLocalDateTime().formatted("dd.MM hh:mm")} " +
-                        "― ${itinerary.endTime.toLocalDateTime().formatted("dd.MM hh:mm")} " +
+                text = "${itinerary.startTime.toLocalDateTime().formatted("dd.MM HH:mm")} " +
+                        "― ${itinerary.endTime.toLocalDateTime().formatted("dd.MM HH:mm")} " +
                         if (expanded) "(${formatDuration(itinerary.duration)})" else "",
                 color = MaterialTheme.colorScheme.secondary,
                 style = MaterialTheme.typography.bodySmall
@@ -64,31 +71,27 @@ fun ItineraryCard(itinerary: Itinerary, modifier: Modifier = Modifier) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    itinerary.legs.first().from.name.let { fromName ->
-                        Text(
-                            text = fromName,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontFamily = FontFamily.Default,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.padding(vertical = 4.dp)
-                        )
-                    }
+                    Text(
+                        text = start,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontFamily = FontFamily.Default,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
                     Icon(
                         painter = painterResource(R.drawable.ic_arrow_right),
                         contentDescription = null,
                         modifier = Modifier.size(16.dp)
                     )
-                    itinerary.legs.last().to.name.let { toName ->
-                        Text(
-                            text = toName,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontFamily = FontFamily.Default,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.padding(vertical = 4.dp)
-                        )
-                    }
+                    Text(
+                        text = end,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontFamily = FontFamily.Default,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
                 }
                 Text(
                     text = "${itinerary.transfers} transfers, ${formatDuration(itinerary.duration)}",
@@ -121,7 +124,7 @@ fun ItineraryCard(itinerary: Itinerary, modifier: Modifier = Modifier) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = leg.from.name,
+                            text = if (index == 0) start else leg.from.name,
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = FontFamily.Default,
@@ -159,7 +162,7 @@ fun ItineraryCard(itinerary: Itinerary, modifier: Modifier = Modifier) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = leg.to.name,
+                                text = end,
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onSurface,
                                 fontFamily = FontFamily.Default,
@@ -192,51 +195,59 @@ fun ItineraryCardPreview() {
     )
     
     AppTheme(darkTheme = true) {
-        ItineraryCard(itinerary = Itinerary(
-            duration = 534,
-            startTime = "2023-10-01T12:00:00",
-            endTime = "2023-10-01T12:09:54",
-            transfers = 2,
-            legs = listOf(
-                Leg(
-                    mode = Mode.WALK,
-                    startTime = "2023-10-01T12:00:00",
-                    endTime = "2023-10-01T12:02:00",
-                    from = place,
-                    to = place,
-                    distance = 200.0,
-                    scheduledStartTime = "2023-10-01T12:00:00",
-                    scheduledEndTime = "2023-10-01T12:02:00",
-                    realTime = false,
-                    scheduled = false,
-                    duration = 111,
-                    legGeometry = EncodedPolyline(""),
+        ItineraryCard(
+            itinerary = Itinerary(
+                duration = 534,
+                startTime = "2023-10-01T12:00:00",
+                endTime = "2023-10-01T12:09:54",
+                transfers = 2,
+                legs = listOf(
+                    Leg(
+                        mode = Mode.WALK,
+                        startTime = "2023-10-01T12:00:00",
+                        endTime = "2023-10-01T12:02:00",
+                        from = place,
+                        to = place,
+                        distance = 200.0,
+                        scheduledStartTime = "2023-10-01T12:00:00",
+                        scheduledEndTime = "2023-10-01T12:02:00",
+                        realTime = false,
+                        scheduled = false,
+                        duration = 111,
+                        legGeometry = EncodedPolyline(""),
+                    ),
+                    Leg(
+                        mode = Mode.WALK,
+                        startTime = "2023-10-01T12:00:00",
+                        endTime = "2023-10-01T12:02:00",
+                        from = place,
+                        to = place,
+                        distance = 200.0,
+                        scheduledStartTime = "2023-10-01T12:00:00",
+                        scheduledEndTime = "2023-10-01T12:02:00",
+                        realTime = false,
+                        scheduled = false,
+                        duration = 111,
+                        legGeometry = EncodedPolyline(""),
+                    ),
                 ),
-                Leg(
-                    mode = Mode.WALK,
-                    startTime = "2023-10-01T12:00:00",
-                    endTime = "2023-10-01T12:02:00",
-                    from = place,
-                    to = place,
-                    distance = 200.0,
-                    scheduledStartTime = "2023-10-01T12:00:00",
-                    scheduledEndTime = "2023-10-01T12:02:00",
-                    realTime = false,
-                    scheduled = false,
-                    duration = 111,
-                    legGeometry = EncodedPolyline(""),
-                ),
+                fareTransfers = emptyList()
             ),
-            fareTransfers = emptyList()
-        ))
+            start = "Praha",
+            end = "Brno"
+        )
     }
 }
 
 fun String.toLocalDateTime(): LocalDateTime {
-    return LocalDateTime.parse(this)
+    return ZonedDateTime.parse(this).toLocalDateTime()
 }
 
 fun LocalDateTime.formatted(format: String): String? {
+    return this.format(ofPattern(format))
+}
+
+fun OffsetDateTime.formatted(format: String): String? {
     return this.format(ofPattern(format))
 }
 

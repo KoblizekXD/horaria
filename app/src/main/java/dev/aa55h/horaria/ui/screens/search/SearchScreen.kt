@@ -1,6 +1,7 @@
 package dev.aa55h.horaria.ui.screens.search
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
@@ -27,7 +29,9 @@ import dev.aa55h.horaria.data.model.SimplePlaceDefinition
 import dev.aa55h.horaria.ui.components.DateChip
 import dev.aa55h.horaria.ui.components.TimeChip
 import dev.aa55h.horaria.ui.screens.search.place.PlaceSearchScreen
+import dev.aa55h.horaria.ui.screens.search.results.SearchResultScreen
 import dev.aa55h.horaria.utils.rememberNavigationResultExtension
+import java.time.LocalDateTime
 
 class SearchScreen: Screen {
     @Composable
@@ -35,6 +39,7 @@ class SearchScreen: Screen {
         val screenModel = rememberScreenModel { SearchScreenModel() }
         val navigator = LocalNavigator.currentOrThrow
         val navigatorExtension = rememberNavigationResultExtension()
+        val context = LocalContext.current
 
         val value = navigatorExtension.getResult<SimplePlaceDefinition>("SearchScreen").value
         Log.d("SearchScreen", "Received result: $value")
@@ -92,7 +97,20 @@ class SearchScreen: Screen {
             }
             Spacer(modifier = Modifier.weight(1f))
             Button(onClick = {
-                // TODO
+                if (screenModel.from == null || screenModel.to == null) {
+                    Log.w("SearchScreen", "From or To place is not set")
+                    Toast.makeText(context, "Please select from and to places", Toast.LENGTH_SHORT)
+                        .show()
+                    return@Button
+                }
+                navigator.push(SearchResultScreen(
+                    from = screenModel.from!!,
+                    to = screenModel.to!!,
+                    dateTime = LocalDateTime.of(
+                        screenModel.date ?: LocalDateTime.now().toLocalDate(),
+                        screenModel.time ?: LocalDateTime.now().toLocalTime()
+                    )
+                ))
             }, modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Search")
             }

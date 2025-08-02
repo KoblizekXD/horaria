@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import dev.aa55h.horaria.ui.screens.home.HomeScreen
 import dev.aa55h.horaria.ui.screens.search.SearchScreen
 import dev.aa55h.horaria.ui.screens.search.place.PlaceSearchScreen
+import dev.aa55h.horaria.ui.screens.search.results.SearchResultScreen
 import kotlin.reflect.KClass
 
 enum class ScreenDetails(
@@ -15,7 +16,8 @@ enum class ScreenDetails(
 ) {
     HOME(HomeScreen::class, "Home"),
     SEARCH(SearchScreen::class, "Search"),
-    PLACE_SEARCH(PlaceSearchScreen::class, "Search", showTopBar = false, showBottomBar = false);
+    PLACE_SEARCH(PlaceSearchScreen::class, "Search", showTopBar = false, showBottomBar = false),
+    SEARCH_RESULT(SearchResultScreen::class, "Search Results", showTopBar = false);
 
     companion object {
         fun fromKClass(kClass: KClass<out Screen>): ScreenDetails? {

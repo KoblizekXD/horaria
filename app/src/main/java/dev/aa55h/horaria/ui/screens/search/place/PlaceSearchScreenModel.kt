@@ -23,13 +23,14 @@ class PlaceSearchScreenModel @Inject constructor(
         private set
 
     fun onQueryChange(newQuery: String) {
-        query = newQuery.trim()
+        query = newQuery
         results.clear()
         debounceJob?.cancel()
+        val searching = query.trim()
         debounceJob = screenModelScope.launch {
             delay(300)
-            if (query.isNotEmpty()) {
-                results.addAll(transitousRepository.autocompleteSearch(query))
+            if (searching.isNotEmpty()) {
+                results.addAll(transitousRepository.autocompleteSearch(searching))
             }
         }
     }

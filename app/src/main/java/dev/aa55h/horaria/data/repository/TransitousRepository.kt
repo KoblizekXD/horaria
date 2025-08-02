@@ -1,8 +1,10 @@
 package dev.aa55h.horaria.data.repository
 
 import dev.aa55h.horaria.data.remote.TransitousApiService
+import dev.aa55h.horaria.ui.components.formatted
 import jakarta.inject.Inject
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 
 class TransitousRepository @Inject constructor(
@@ -23,7 +25,8 @@ class TransitousRepository @Inject constructor(
     ) = api.getOptimalConnections(
         fromPlace = fromId,
         toPlace = toId,
-        language = "en",
-        time = at.toString(),
+        language = "cs",
+        time = at.atOffset(ZoneOffset.UTC).formatted("yyyy-MM-dd'T'HH:mm:ss.SSSX"),
+        numItineraries = 5
     )
 }

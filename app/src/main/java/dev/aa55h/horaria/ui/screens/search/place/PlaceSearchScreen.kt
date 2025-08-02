@@ -89,7 +89,7 @@ class PlaceSearchScreen(
                     ListItem(
                         modifier = Modifier.clickable {
                             navigatorExtension.setResult("SearchScreen", SimplePlaceDefinition(
-                                id = item.id,
+                                id = if (item.type == Type.STOP) item.id else "${item.lat.toDouble()},${item.lon.toDouble()}",
                                 name = item.name,
                                 source = type
                             ))
