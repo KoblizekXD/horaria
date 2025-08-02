@@ -39,7 +39,7 @@ class VoyagerResultExtension(
     }
 
     fun popWithResult(result: Any? = null) {
-        val currentScreen = navigator.lastItem
+        val currentScreen = navigator.items[navigator.items.size - 1]
         results[currentScreen.key] = result
         navigator.pop()
     }
@@ -50,7 +50,7 @@ class VoyagerResultExtension(
 
 
     fun popUntilWithResult(predicate: (Screen) -> Boolean, result: Any? = null) {
-        val currentScreen = navigator.lastItem
+        val currentScreen = navigator.items[navigator.items.size - 1]
         results[currentScreen.key] = result
         navigator.popUntil(predicate)
     }

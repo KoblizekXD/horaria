@@ -1,5 +1,6 @@
 package dev.aa55h.horaria.ui.screens.search
 
+import android.util.Log
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
@@ -19,8 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.ScreenKey
-import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.aa55h.horaria.data.model.SearchScreenSource
@@ -31,15 +30,14 @@ import dev.aa55h.horaria.ui.screens.search.place.PlaceSearchScreen
 import dev.aa55h.horaria.utils.rememberNavigationResultExtension
 
 class SearchScreen: Screen {
-    override val key: ScreenKey = uniqueScreenKey
-
     @Composable
     override fun Content() {
         val screenModel = rememberScreenModel { SearchScreenModel() }
         val navigator = LocalNavigator.currentOrThrow
         val navigatorExtension = rememberNavigationResultExtension()
 
-        val value = navigatorExtension.getResult<SimplePlaceDefinition>(key).value
+        val value = navigatorExtension.getResult<SimplePlaceDefinition>("SearchScreen").value
+        Log.d("SearchScreen", "Received result: $value")
         if (value != null) {
             if (value.source == SearchScreenSource.FROM) {
                 screenModel.from = value
@@ -60,8 +58,9 @@ class SearchScreen: Screen {
                     Text("From...")
                 },
                 onClick = {
-                    navigator.push(PlaceSearchScreen(SearchScreenSource.FROM))
-                }
+                    navigator.push(PlaceSearchScreen(SearchScreenSource.FROM, navigatorExtension))
+                },
+                value = screenModel.from?.name ?: ""
             )
 
             PlaceSearchInput(
@@ -70,8 +69,9 @@ class SearchScreen: Screen {
                     Text("To...")
                 },
                 onClick = {
-                    navigator.push(PlaceSearchScreen(SearchScreenSource.TO))
-                }
+                    navigator.push(PlaceSearchScreen(SearchScreenSource.TO, navigatorExtension))
+                },
+                value = screenModel.to?.name ?: ""
             )
 
             Row(
@@ -105,7 +105,8 @@ class SearchScreen: Screen {
         modifier: Modifier = Modifier,
         placeholder: @Composable () -> Unit = {},
         icon: @Composable () -> Unit = {},
-        onClick: () -> Unit = {}
+        onClick: () -> Unit = {},
+        value: String = "",
     ) {
         OutlinedTextField(
             readOnly = true,
@@ -121,7 +122,7 @@ class SearchScreen: Screen {
                     }
                 },
             placeholder = placeholder,
-            value = screenModel.from?.name ?: "",
+            value = value,
             trailingIcon = {
                 icon
             },

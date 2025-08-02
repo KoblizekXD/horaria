@@ -14,7 +14,11 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -25,15 +29,22 @@ import dev.aa55h.horaria.R
 import dev.aa55h.horaria.data.model.SearchAutocompleteResult
 import dev.aa55h.horaria.data.model.SearchScreenSource
 import dev.aa55h.horaria.data.model.SimplePlaceDefinition
-import dev.aa55h.horaria.utils.rememberNavigationResultExtension
+import dev.aa55h.horaria.utils.VoyagerResultExtension
 
 @OptIn(ExperimentalMaterial3Api::class)
-class PlaceSearchScreen(private val type: SearchScreenSource): Screen {
+class PlaceSearchScreen(
+    private val type: SearchScreenSource,
+    private val navigatorExtension: VoyagerResultExtension
+): Screen {
     @Composable
     override fun Content() {
         val screenModel = getScreenModel<PlaceSearchScreenModel>()
+        val focusRequester = remember { FocusRequester() }
         val navigator = LocalNavigator.currentOrThrow
-        val navigatorExtension = rememberNavigationResultExtension()
+
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
 
         SearchBar(
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
@@ -44,6 +55,7 @@ class PlaceSearchScreen(private val type: SearchScreenSource): Screen {
             expanded = true,
             inputField = {
                 SearchBarDefaults.InputField(
+                    modifier = Modifier.focusRequester(focusRequester),
                     query = screenModel.query,
                     onQueryChange = { screenModel.onQueryChange(it) },
                     leadingIcon = {
@@ -52,6 +64,18 @@ class PlaceSearchScreen(private val type: SearchScreenSource): Screen {
                         }) {
                             Icon(painterResource(R.drawable.ic_arrow_back), "Back")
                         }
+                    },
+                    trailingIcon = {
+                        if (screenModel.query.isNotEmpty()) {
+                            IconButton({
+                                screenModel.onQueryChange("")
+                            }) {
+                                Icon(painterResource(R.drawable.ic_close), "Clear")
+                            }
+                        }
+                    },
+                    placeholder = {
+                        Text("I really want to find...")
                     },
                     onSearch = {},
                     expanded = true,
@@ -64,11 +88,12 @@ class PlaceSearchScreen(private val type: SearchScreenSource): Screen {
                 items(screenModel.results) { item ->
                     ListItem(
                         modifier = Modifier.clickable {
-                            navigatorExtension.popWithResult(SimplePlaceDefinition(
+                            navigatorExtension.setResult("SearchScreen", SimplePlaceDefinition(
                                 id = item.id,
                                 name = item.name,
                                 source = type
                             ))
+                            navigator.pop()
                         },
                         headlineContent = {
                             Text(item.name)
@@ -90,7 +115,7 @@ class PlaceSearchScreen(private val type: SearchScreenSource): Screen {
                                     }
                                     SearchAutocompleteResult.Type.PLACE,
                                     SearchAutocompleteResult.Type.STOP -> buildString {
-                                        item.areas.subList(0, 3).forEachIndexed { index, area ->
+                                        item.areas.take(3).forEachIndexed { index, area ->
                                             append(area.name)
                                             if (index < 2) append(", ")
                                         }
