@@ -496,6 +496,7 @@ enum class Mode {
             NIGHT_RAIL, RAIL -> R.drawable.ic_train
             REGIONAL_FAST_RAIL,
             REGIONAL_RAIL,
+            LONG_DISTANCE,
             HIGHSPEED_RAIL -> R.drawable.ic_direction_railway
             else -> R.drawable.ic_direction
         }

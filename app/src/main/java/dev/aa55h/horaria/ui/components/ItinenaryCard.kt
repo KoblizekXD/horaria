@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -148,7 +150,20 @@ fun ItineraryCard(
                             modifier = Modifier.size(16.dp)
                         )
                         Text(text = leg.mode.pretty(), fontSize = 14.sp)
-                        "${leg.distance?.toInt()}m (${formatDuration(leg.duration)})"
+                        leg.routeShortName?.let {
+                            SuggestionChip(
+                                onClick = {},
+                                modifier = Modifier
+                                    .height(20.dp),
+                                label = {
+                                    Text(it, fontSize = 10.sp)
+                                },
+                                colors = SuggestionChipDefaults.suggestionChipColors(
+                                    labelColor = if (leg.routeTextColor != null) Color("FF${leg.routeTextColor}".toLong(16)) else Color.Unspecified,
+                                    containerColor = if (leg.routeColor != null) Color("FF${leg.routeColor}".toLong(16)) else Color.Unspecified
+                                ),
+                            )
+                        }
                         Text(
                             text = buildString {
                                 if (leg.distance != null) append("${leg.distance.toInt()}m ")
@@ -200,14 +215,14 @@ fun ItineraryCardPreview() {
         ItineraryCard(
             itinerary = Itinerary(
                 duration = 534,
-                startTime = "2023-10-01T12:00:00",
-                endTime = "2023-10-01T12:09:54",
+                startTime = "2025-08-03T04:31:00Z",
+                endTime = "2025-08-03T04:31:00Z",
                 transfers = 2,
                 legs = listOf(
                     Leg(
                         mode = Mode.WALK,
-                        startTime = "2023-10-01T12:00:00",
-                        endTime = "2023-10-01T12:02:00",
+                        startTime = "2025-08-03T04:31:00Z",
+                        endTime = "2025-08-03T04:31:00Z",
                         from = place,
                         to = place,
                         distance = 200.0,
@@ -215,6 +230,7 @@ fun ItineraryCardPreview() {
                         scheduledEndTime = "2023-10-01T12:02:00",
                         realTime = false,
                         scheduled = false,
+                        routeShortName = "R 667",
                         duration = 111,
                         legGeometry = EncodedPolyline(""),
                     ),
