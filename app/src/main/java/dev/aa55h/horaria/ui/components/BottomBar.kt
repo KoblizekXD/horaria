@@ -6,45 +6,29 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import dev.aa55h.horaria.ui.screens.Screen
-import dev.aa55h.horaria.ui.theme.AppTheme
+import cafe.adriel.voyager.navigator.Navigator
+import dev.aa55h.horaria.R
+import dev.aa55h.horaria.ui.screens.ScreenDetails
 
 @Composable
-fun BottomBar(navController: NavHostController, currentScreen: Screen = Screen.Home) {
+fun BottomBar(navigator: Navigator) {
     NavigationBar {
-        Screen.bottomNavItems.forEach { screen ->
+        ScreenDetails.onBottomBar.forEach { (screenDetails, screen) ->
             NavigationBarItem(
-                icon = {
-                    screen.icon?.let {
-                        Icon(painterResource(it), contentDescription = screen.label)
-                    }
-                },
-                label = { Text(screen.label, fontFamily = FontFamily.Default) },
-                selected = screen == currentScreen,
+                selected = navigator.lastItem::class == screenDetails.kClass,
                 onClick = {
-                    navController.navigate(screen) {
-                        popUpTo(navController.graph.startDestinationId) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    navigator.replace(screen())
+                },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = screenDetails.icon ?: R.drawable.ic_home),
+                        contentDescription = null
+                    )
+                },
+                label = {
+                    Text(text = screenDetails.title)
                 }
             )
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun BarPreview() {
-    val navController = rememberNavController()
-    AppTheme(darkTheme = true) {
-        BottomBar(navController)
     }
 }

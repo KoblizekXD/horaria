@@ -10,16 +10,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import cafe.adriel.voyager.navigator.Navigator
 import dev.aa55h.horaria.R
+import dev.aa55h.horaria.ui.screens.home.HomeScreen
 import dev.aa55h.horaria.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GenericTopBar(
     title: String,
-    navController: NavHostController,
+    navigator: Navigator,
     displayBackArrow: Boolean = false
 ) {
     TopAppBar(
@@ -27,7 +27,7 @@ fun GenericTopBar(
         navigationIcon = {
             if (displayBackArrow) {
                 IconButton(onClick = {
-                    navController.popBackStack()
+                    navigator.pop()
                 }) {
                     Icon(painterResource(R.drawable.ic_arrow_back), contentDescription = "Back")
                 }
@@ -40,6 +40,8 @@ fun GenericTopBar(
 @Composable
 fun TopBarPreview() {
     AppTheme(darkTheme = true) {
-        GenericTopBar(title = "Home", navController = rememberNavController())
+        Navigator(listOf(HomeScreen())) {
+            GenericTopBar(title = "Home", navigator = it, displayBackArrow = true)
+        }
     }
 }

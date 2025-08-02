@@ -76,4 +76,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.voyager.navigator)
+    implementation(libs.voyager.hilt)
+    implementation(libs.voyager.transitions)
 }
