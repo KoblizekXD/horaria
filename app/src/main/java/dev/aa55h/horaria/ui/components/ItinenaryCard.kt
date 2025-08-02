@@ -109,12 +109,12 @@ fun ItineraryCard(
                         fontWeight = FontWeight.SemiBold
                     )
                     itinerary.legs.map { it.mode }.distinct().forEach { mode ->
-                        Text(text = mode.pretty(), style = MaterialTheme.typography.bodySmall)
                         Icon(
                             painter = painterResource(mode.icon()),
                             contentDescription = null,
                             modifier = Modifier.size(16.dp)
                         )
+                        Text(text = mode.pretty(), style = MaterialTheme.typography.bodySmall)
                     }
                 }
             } else {
