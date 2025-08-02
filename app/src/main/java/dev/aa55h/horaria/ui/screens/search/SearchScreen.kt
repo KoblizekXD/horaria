@@ -21,8 +21,14 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import dev.aa55h.horaria.data.model.SearchScreenSource
+import dev.aa55h.horaria.data.model.SimplePlaceDefinition
 import dev.aa55h.horaria.ui.components.DateChip
 import dev.aa55h.horaria.ui.components.TimeChip
+import dev.aa55h.horaria.ui.screens.search.place.PlaceSearchScreen
+import dev.aa55h.horaria.utils.rememberNavigationResultExtension
 
 class SearchScreen: Screen {
     override val key: ScreenKey = uniqueScreenKey
@@ -30,6 +36,18 @@ class SearchScreen: Screen {
     @Composable
     override fun Content() {
         val screenModel = rememberScreenModel { SearchScreenModel() }
+        val navigator = LocalNavigator.currentOrThrow
+        val navigatorExtension = rememberNavigationResultExtension()
+
+        val value = navigatorExtension.getResult<SimplePlaceDefinition>(key).value
+        if (value != null) {
+            if (value.source == SearchScreenSource.FROM) {
+                screenModel.from = value
+            } else if (value.source == SearchScreenSource.TO) {
+                screenModel.to = value
+            }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -41,13 +59,19 @@ class SearchScreen: Screen {
                 placeholder = {
                     Text("From...")
                 },
+                onClick = {
+                    navigator.push(PlaceSearchScreen(SearchScreenSource.FROM))
+                }
             )
 
             PlaceSearchInput(
                 screenModel = screenModel,
                 placeholder = {
-                    Text("From...")
+                    Text("To...")
                 },
+                onClick = {
+                    navigator.push(PlaceSearchScreen(SearchScreenSource.TO))
+                }
             )
 
             Row(
@@ -80,7 +104,8 @@ class SearchScreen: Screen {
         screenModel: SearchScreenModel,
         modifier: Modifier = Modifier,
         placeholder: @Composable () -> Unit = {},
-        icon: @Composable () -> Unit = {}
+        icon: @Composable () -> Unit = {},
+        onClick: () -> Unit = {}
     ) {
         OutlinedTextField(
             readOnly = true,
@@ -90,7 +115,7 @@ class SearchScreen: Screen {
                     LaunchedEffect(interactionSource) {
                         interactionSource.interactions.collect {
                             if (it is PressInteraction.Press) {
-                                // TODO
+                                onClick()
                             }
                         }
                     }

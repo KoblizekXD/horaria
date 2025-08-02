@@ -10,7 +10,7 @@ class TransitousRepository @Inject constructor(
 ) {
     suspend fun autocompleteSearch(query: String) = api.getGeocode(
         text = query,
-        language = "en",
+        language = "cs",
         type = null,
         place = null,
         placeBias = null

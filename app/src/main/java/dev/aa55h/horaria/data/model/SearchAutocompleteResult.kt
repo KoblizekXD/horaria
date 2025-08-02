@@ -1,5 +1,7 @@
 package dev.aa55h.horaria.data.model
 
+import dev.aa55h.horaria.R
+
 data class SearchAutocompleteResult(
     val type: Type,
     val tokens: List<List<Int>>,
@@ -17,7 +19,13 @@ data class SearchAutocompleteResult(
     enum class Type {
         ADDRESS,
         PLACE,
-        STOP,
+        STOP;
+
+        fun icon() = when (this) {
+            ADDRESS -> R.drawable.ic_pin_drop
+            PLACE -> R.drawable.ic_location_city
+            STOP -> R.drawable.ic_direction
+        }
     }
 
     data class Area(
