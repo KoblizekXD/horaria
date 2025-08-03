@@ -48,7 +48,7 @@ class SearchResultScreen(
         }
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(12.dp),
+            modifier = Modifier.fillMaxSize().padding(12.dp, 12.dp, 12.dp, 0.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {
@@ -63,17 +63,12 @@ class SearchResultScreen(
                 }
             }
             item {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(4.dp, 0.dp, 12.dp, 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        dateTime.formatted("dd MMMM yyyy, HH:mm")!!,
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
-                    )
-                }
+                Text(
+                    dateTime.formatted("dd MMMM yyyy, HH:mm")!!,
+                    modifier = Modifier.padding(12.dp, 0.dp, 12.dp, 16.dp),
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
             }
             if (screenModel.loading) {
                 item {
@@ -86,7 +81,7 @@ class SearchResultScreen(
                     )
                 }
             } else {
-                items(screenModel.results!!.itineraries) {
+                items(screenModel.results!!.itineraries.ifEmpty { screenModel.results!!.direct }) {
                     ItineraryCard(
                         it, modifier = Modifier.fillMaxWidth(),
                         start = from.name,

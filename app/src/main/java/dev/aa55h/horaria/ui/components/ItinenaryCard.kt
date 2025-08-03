@@ -54,12 +54,14 @@ fun ItineraryCard(
     end: String,
     modifier: Modifier = Modifier
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(true) }
 
     Card {
         Column(
-            modifier = Modifier.clickable { expanded = !expanded }
-                .padding(12.dp).then(modifier)
+            modifier = Modifier
+                .clickable { expanded = !expanded }
+                .padding(12.dp, 12.dp, 12.dp, 4.dp)
+                .then(modifier)
         ) {
             Text(
                 text = "${itinerary.startTime.toLocalDateTime().formatted("dd.MM HH:mm")} " +
@@ -96,7 +98,8 @@ fun ItineraryCard(
                     )
                 }
                 Text(
-                    text = "${itinerary.transfers} transfers, ${formatDuration(itinerary.duration)}",
+                    text = "${itinerary.transfers} transfer${if (itinerary.transfers > 0) "s" else ""}, "
+                            + formatDuration(itinerary.duration),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 4.dp)
@@ -159,9 +162,10 @@ fun ItineraryCard(
                                     Text(it, fontSize = 10.sp)
                                 },
                                 colors = SuggestionChipDefaults.suggestionChipColors(
-                                    labelColor = if (leg.routeTextColor != null) Color("FF${leg.routeTextColor}".toLong(16)) else Color.Unspecified,
+                                    labelColor = if (leg.routeTextColor != null) Color("FF${leg.routeTextColor}".toLong(16)) else Color.White,
                                     containerColor = if (leg.routeColor != null) Color("FF${leg.routeColor}".toLong(16)) else Color.Unspecified
                                 ),
+                                border = SuggestionChipDefaults.suggestionChipBorder(false),
                             )
                         }
                         Text(
@@ -189,13 +193,13 @@ fun ItineraryCard(
                         }
                     }
                 }
-                TextButton(onClick = {}) {
-                    Text(
-                        text = "Show details",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
+            }
+            TextButton(onClick = {}) {
+                Text(
+                    text = "Show details",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }
@@ -279,7 +283,7 @@ fun formatDuration(totalSeconds: Long): String {
         if (days > 0) append("${days}d ")
         if (hours > 0 || days > 0) append("${hours}h ")
         if (minutes > 0 || hours > 0 || days > 0) append("${minutes}m ")
-        if (seconds > 0 || minutes > 0 || hours > 0 || days > 0) append("${seconds}s")
+        if (seconds > 0) append("${seconds}s")
     }.trim()
 }
 

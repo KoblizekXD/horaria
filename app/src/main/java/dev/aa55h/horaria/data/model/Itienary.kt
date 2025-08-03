@@ -470,7 +470,7 @@ enum class Mode {
             SUBWAY,
             METRO -> "Metro"
             BUS,
-            COACH -> "Coach"
+            COACH -> "Bus"
             RAIL -> "Rail"
             HIGHSPEED_RAIL -> "High-Speed Train"
             LONG_DISTANCE -> "Long-Distance Train"

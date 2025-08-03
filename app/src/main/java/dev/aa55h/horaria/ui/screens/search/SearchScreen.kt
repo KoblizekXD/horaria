@@ -22,6 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.aa55h.horaria.data.model.SearchScreenSource
@@ -34,6 +36,8 @@ import dev.aa55h.horaria.utils.rememberNavigationResultExtension
 import java.time.LocalDateTime
 
 class SearchScreen: Screen {
+    override val key: ScreenKey = uniqueScreenKey
+
     @Composable
     override fun Content() {
         val screenModel = rememberScreenModel { SearchScreenModel() }

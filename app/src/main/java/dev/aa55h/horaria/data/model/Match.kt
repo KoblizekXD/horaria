@@ -8,9 +8,9 @@ data class Match(
     val lat: String,
     val lon: String,
     val level: Int = 0,
-    val street: String = "",
-    val houseNumber: String = "",
-    val zip: String = "",
+    val street: String? = "",
+    val houseNumber: String? = "",
+    val zip: String? = "",
     val areas: List<Area> = emptyList(),
     val score: Float = 0.0f,
 ) {

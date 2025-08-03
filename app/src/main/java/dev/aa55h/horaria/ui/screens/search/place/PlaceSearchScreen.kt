@@ -139,9 +139,9 @@ class PlaceSearchScreen(
                                 Text(
                                     text = when (item.type) {
                                         Type.ADDRESS -> buildString {
-                                            append(item.street)
-                                            if (item.houseNumber.isNotEmpty()) append(" ${item.houseNumber}")
-                                            if (item.zip.isNotEmpty()) append(", ${item.zip}")
+                                            if (item.street?.isNotEmpty() ?: false) append(item.street)
+                                            if (item.houseNumber?.isNotEmpty() ?: false) append(" ${item.houseNumber}")
+                                            if (item.zip?.isNotEmpty() ?: false) append(", ${item.zip}")
                                             item.areas.subList(0, 1).forEachIndexed { index, area ->
                                                 append(area.name)
                                                 if (index < item.areas.size - 1) append(", ")
@@ -149,9 +149,9 @@ class PlaceSearchScreen(
                                         }
                                         Type.PLACE,
                                         Type.STOP -> buildString {
-                                            item.areas.take(3).forEachIndexed { index, area ->
+                                            item.areas.forEachIndexed { index, area ->
                                                 append(area.name)
-                                                if (index < 2) append(", ")
+                                                if (index < item.areas.size - 1) append(", ")
                                             }
                                         }
                                     }
