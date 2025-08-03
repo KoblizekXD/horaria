@@ -28,6 +28,7 @@ import dev.aa55h.horaria.data.model.SimplePlaceDefinition
 import dev.aa55h.horaria.ui.components.ItineraryCard
 import dev.aa55h.horaria.ui.components.formatted
 import dev.aa55h.horaria.utils.LocalDateTimeParceler
+import dev.aa55h.horaria.utils.distinct
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.TypeParceler
 import java.time.LocalDateTime
@@ -81,7 +82,7 @@ class SearchResultScreen(
                     )
                 }
             } else {
-                items(screenModel.results!!.itineraries.ifEmpty { screenModel.results!!.direct }) {
+                items(screenModel.results!!.itineraries.distinct().ifEmpty { screenModel.results!!.direct.distinct() }) {
                     ItineraryCard(
                         it, modifier = Modifier.fillMaxWidth(),
                         start = from.name,
