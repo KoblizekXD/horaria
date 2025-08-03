@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import dev.aa55h.horaria.data.model.Match
+import dev.aa55h.horaria.data.repository.RecentSearchesRepository
 import dev.aa55h.horaria.data.repository.TransitousRepository
 import jakarta.inject.Inject
 import kotlinx.coroutines.Job
@@ -14,7 +15,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PlaceSearchScreenModel @Inject constructor(
-    val transitousRepository: TransitousRepository
+    private val transitousRepository: TransitousRepository,
+    val recentSearchesRepository: RecentSearchesRepository
 ): ScreenModel {
     var query by mutableStateOf("")
     val results = mutableStateListOf<Match>()

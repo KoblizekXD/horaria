@@ -81,4 +81,5 @@ dependencies {
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.hilt)
     implementation(libs.voyager.transitions)
+    implementation(libs.androidx.datastore.preferences)
 }

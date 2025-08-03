@@ -15,7 +15,10 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -30,6 +33,7 @@ import dev.aa55h.horaria.data.model.SearchScreenSource
 import dev.aa55h.horaria.data.model.SimplePlaceDefinition
 import dev.aa55h.horaria.data.model.Type
 import dev.aa55h.horaria.utils.VoyagerResultExtension
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 class PlaceSearchScreen(
@@ -41,6 +45,8 @@ class PlaceSearchScreen(
         val screenModel = getScreenModel<PlaceSearchScreenModel>()
         val focusRequester = remember { FocusRequester() }
         val navigator = LocalNavigator.currentOrThrow
+        val recentSearches by screenModel.recentSearchesRepository.recentSearches.collectAsState(initial = emptySet())
+        val coroutineScope = rememberCoroutineScope()
 
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
@@ -85,45 +91,74 @@ class PlaceSearchScreen(
             onExpandedChange = {}
         ) {
             LazyColumn {
-                items(screenModel.results) { item ->
-                    ListItem(
-                        modifier = Modifier.clickable {
-                            navigatorExtension.setResult("SearchScreen", SimplePlaceDefinition(
-                                id = if (item.type == Type.STOP) item.id else "${item.lat.toDouble()},${item.lon.toDouble()}",
-                                name = item.name,
-                                source = type
-                            ))
-                            navigator.pop()
-                        },
-                        headlineContent = {
-                            Text(item.name)
-                        },
-                        leadingContent = {
-                            Icon(painter = painterResource(item.type.icon()), contentDescription = item.type.toString())
-                        },
-                        supportingContent = {
-                            Text(
-                                text = when (item.type) {
-                                    Type.ADDRESS -> buildString {
-                                        append(item.street)
-                                        if (item.houseNumber.isNotEmpty()) append(" ${item.houseNumber}")
-                                        if (item.zip.isNotEmpty()) append(", ${item.zip}")
-                                        item.areas.subList(0, 1).forEachIndexed { index, area ->
-                                            append(area.name)
-                                            if (index < item.areas.size - 1) append(", ")
-                                        }
-                                    }
-                                    Type.PLACE,
-                                    Type.STOP -> buildString {
-                                        item.areas.take(3).forEachIndexed { index, area ->
-                                            append(area.name)
-                                            if (index < 2) append(", ")
-                                        }
-                                    }
+                if (screenModel.query.trim().isEmpty() && screenModel.results.isEmpty()) {
+                    items(recentSearches.reversed()) { item ->
+                        ListItem(
+                            modifier = Modifier.clickable {
+                                val placeDefinition = SimplePlaceDefinition(
+                                    id = item.id,
+                                    name = item.name,
+                                    source = type
+                                )
+                                navigatorExtension.setResult("SearchScreen", placeDefinition)
+                                coroutineScope.launch {
+                                    screenModel.recentSearchesRepository.appendRecentSearch(placeDefinition)
                                 }
-                            )
-                        },
-                    )
+                                navigator.pop()
+                            },
+                            headlineContent = {
+                                Text(item.name)
+                            },
+                            leadingContent = {
+                                Icon(painter = painterResource(R.drawable.ic_search_activity), contentDescription = "Recent Search")
+                            },
+                        )
+                    }
+                } else {
+                    items(screenModel.results) { item ->
+                        ListItem(
+                            modifier = Modifier.clickable {
+                                val placeDefinition = SimplePlaceDefinition(
+                                    id = if (item.type == Type.STOP) item.id else "${item.lat.toDouble()},${item.lon.toDouble()}",
+                                    name = item.name,
+                                    source = type
+                                )
+                                navigatorExtension.setResult("SearchScreen", placeDefinition)
+                                coroutineScope.launch {
+                                    screenModel.recentSearchesRepository.appendRecentSearch(placeDefinition)
+                                }
+                                navigator.pop()
+                            },
+                            headlineContent = {
+                                Text(item.name)
+                            },
+                            leadingContent = {
+                                Icon(painter = painterResource(item.type.icon()), contentDescription = item.type.toString())
+                            },
+                            supportingContent = {
+                                Text(
+                                    text = when (item.type) {
+                                        Type.ADDRESS -> buildString {
+                                            append(item.street)
+                                            if (item.houseNumber.isNotEmpty()) append(" ${item.houseNumber}")
+                                            if (item.zip.isNotEmpty()) append(", ${item.zip}")
+                                            item.areas.subList(0, 1).forEachIndexed { index, area ->
+                                                append(area.name)
+                                                if (index < item.areas.size - 1) append(", ")
+                                            }
+                                        }
+                                        Type.PLACE,
+                                        Type.STOP -> buildString {
+                                            item.areas.take(3).forEachIndexed { index, area ->
+                                                append(area.name)
+                                                if (index < 2) append(", ")
+                                            }
+                                        }
+                                    }
+                                )
+                            },
+                        )
+                    }
                 }
             }
         }
