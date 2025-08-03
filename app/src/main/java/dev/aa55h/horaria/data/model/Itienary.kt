@@ -194,10 +194,10 @@ data class Leg(
  */
 data class StepInstruction(
     /** Level where this segment starts, based on OpenStreetMap data */
-    val fromLevel: Int,
+    val fromLevel: Double,
 
     /** Level where this segment ends, based on OpenStreetMap data */
-    val toLevel: Int,
+    val toLevel: Double,
 
     /** Encoded polyline representing this segment of the path */
     val polyline: EncodedPolyline,
@@ -260,7 +260,20 @@ data class EncodedPolyline(
  * Describes the relative direction for a navigation step.
  */
 enum class Direction {
-    // Define possible values here (not provided in your schema)
+    DEPART,
+    HARD_LEFT,
+    LEFT,
+    SLIGHTLY_LEFT,
+    CONTINUE,
+    SLIGHTLY_RIGHT,
+    RIGHT,
+    HARD_RIGHT,
+    CIRCLE_CLOCKWISE,
+    CIRCLE_COUNTERCLOCKWISE,
+    STAIRS,
+    ELEVATOR,
+    UTURN_LEFT,
+    UTURN_RIGHT
 }
 
 /**

@@ -2,7 +2,7 @@
     <string name="app_name">Horaria</string>
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>
-    <string name="title_search_results">Search Results</string>
+    <string name="title_search_results" />
     <string name="from_placeholder">From…</string>
     <string name="to_placeholder">To…</string>
     <string name="search_button">Search</string>
@@ -34,4 +34,7 @@
     <string name="mode_funicular">Funicular</string>
     <string name="mode_aerial_lift">Aerial Lift</string>
     <string name="mode_other">Other Transport Mode</string>
+    <string name="type_place">Place</string>
+    <string name="type_address">Address</string>
+    <string name="type_stop">Stop</string>
 </resources>

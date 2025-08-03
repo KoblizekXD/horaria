@@ -55,7 +55,7 @@ fun ItineraryCard(
     end: String,
     modifier: Modifier = Modifier
 ) {
-    var expanded by remember { mutableStateOf(true) }
+    var expanded by remember { mutableStateOf(false) }
 
     Card {
         Column(
@@ -99,7 +99,7 @@ fun ItineraryCard(
                     )
                 }
                 Text(
-                    text = "${itinerary.transfers} transfer${if (itinerary.transfers > 0) "s" else ""}, "
+                    text = "${if (itinerary.transfers == 0) "no" else itinerary.transfers} transfer${if (itinerary.transfers == 1) "" else "s"}, "
                             + formatDuration(itinerary.duration),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

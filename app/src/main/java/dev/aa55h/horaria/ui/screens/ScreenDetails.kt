@@ -1,5 +1,6 @@
 package dev.aa55h.horaria.ui.screens
 
+import androidx.annotation.StringRes
 import cafe.adriel.voyager.core.screen.Screen
 import dev.aa55h.horaria.R
 import dev.aa55h.horaria.ui.screens.home.HomeScreen
@@ -10,15 +11,16 @@ import kotlin.reflect.KClass
 
 enum class ScreenDetails(
     val kClass: KClass<out Screen>,
-    val title: Int,
+    @param:StringRes val title: Int,
     val icon: Int? = null,
     val showTopBar: Boolean = true,
     val showBottomBar: Boolean = true,
+    val showBackArrow: Boolean = false
 ) {
     HOME(HomeScreen::class, R.string.title_home, icon = R.drawable.ic_home),
     SEARCH(SearchScreen::class, R.string.title_search, icon = R.drawable.ic_search),
     PLACE_SEARCH(PlaceSearchScreen::class, R.string.title_search, showTopBar = false, showBottomBar = false),
-    SEARCH_RESULT(SearchResultScreen::class, R.string.title_search_results, showTopBar = false);
+    SEARCH_RESULT(SearchResultScreen::class, R.string.title_search_results, showTopBar = true, showBackArrow = true);
 
     companion object {
         fun fromKClass(kClass: KClass<out Screen>): ScreenDetails? {

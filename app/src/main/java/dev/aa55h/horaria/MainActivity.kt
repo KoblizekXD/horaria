@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                                     GenericTopBar(
                                         title = this.getString(details.title),
                                         navigator = it,
-                                        displayBackArrow = false
+                                        displayBackArrow = details.showBackArrow
                                     )
                                 }
                             }

@@ -3,7 +3,7 @@
     <string name="app_name">Horaria</string>
     <string name="title_home">Domů</string>
     <string name="title_search">Hledat</string>
-    <string name="title_search_results">Výsledky hledání</string>
+    <string name="title_search_results" />
     <string name="from_placeholder">Odkud…</string>
     <string name="to_placeholder">Do…</string>
     <string name="search_button">Hledat</string>
@@ -35,5 +35,7 @@
     <string name="mode_funicular">Pozemní lanovka</string>
     <string name="mode_aerial_lift">Visutá lanovka</string>
     <string name="mode_other">Jiný způsob dopravy</string>
-
+    <string name="type_place">Místo</string>
+    <string name="type_address">Adresa</string>
+    <string name="type_stop">Zastávka</string>
 </resources>

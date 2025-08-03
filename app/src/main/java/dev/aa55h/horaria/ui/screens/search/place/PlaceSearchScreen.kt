@@ -134,16 +134,16 @@ class PlaceSearchScreen(
                                 Text(item.name)
                             },
                             leadingContent = {
-                                Icon(painter = painterResource(item.type.icon()), contentDescription = item.type.toString())
+                                Icon(item.type.icon(), contentDescription = item.type.toString())
                             },
                             supportingContent = {
                                 Text(
-                                    text = when (item.type) {
+                                    text = "${stringResource(item.type.label())}, " + when (item.type) {
                                         Type.ADDRESS -> buildString {
                                             if (item.street?.isNotEmpty() ?: false) append(item.street)
                                             if (item.houseNumber?.isNotEmpty() ?: false) append(" ${item.houseNumber}")
                                             if (item.zip?.isNotEmpty() ?: false) append(", ${item.zip}")
-                                            item.areas.subList(0, 1).forEachIndexed { index, area ->
+                                            item.areas.forEachIndexed { index, area ->
                                                 append(area.name)
                                                 if (index < item.areas.size - 1) append(", ")
                                             }

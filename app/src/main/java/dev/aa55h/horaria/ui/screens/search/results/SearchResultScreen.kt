@@ -54,7 +54,7 @@ class SearchResultScreen(
             item {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth().padding(12.dp, 48.dp, 0.dp, 4.dp),
+                    modifier = Modifier.fillMaxWidth().padding(12.dp, 32.dp, 0.dp, 4.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(from.name, fontSize = 28.sp, overflow = TextOverflow.Ellipsis)
