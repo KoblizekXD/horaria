@@ -9,6 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import dev.aa55h.horaria.R
 import dev.aa55h.horaria.utils.localDate
 import java.time.LocalDate
 
@@ -29,12 +31,12 @@ fun DatePickerModal(
                     onConfirm(localDate(selectedDate))
                 else onDismiss()
             }) {
-                Text("Done")
+                Text(stringResource(R.string.dialog_date_done))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.dialog_date_cancel))
             }
         }
     ) {

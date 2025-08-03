@@ -7,6 +7,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import dev.aa55h.horaria.R
 import java.time.LocalTime
 import java.util.Calendar
 
@@ -28,7 +30,7 @@ fun TimePickerModal(
         onDismissRequest = onDismiss,
         dismissButton = {
             TextButton(onClick = { onDismiss() }) {
-                Text("Dismiss")
+                Text(stringResource(R.string.dialog_time_dismiss))
             }
         },
         confirmButton = {
@@ -36,7 +38,7 @@ fun TimePickerModal(
                 timePickerState.hour,
                 timePickerState.minute
             )) }) {
-                Text("Done")
+                Text(stringResource(R.string.dialog_time_done))
             }
         },
         text = {

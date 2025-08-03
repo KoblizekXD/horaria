@@ -1,3 +1,37 @@
 <resources>
     <string name="app_name">Horaria</string>
+    <string name="title_home">Home</string>
+    <string name="title_search">Search</string>
+    <string name="title_search_results">Search Results</string>
+    <string name="from_placeholder">From…</string>
+    <string name="to_placeholder">To…</string>
+    <string name="search_button">Search</string>
+    <string name="search_button_error">Please select from and to places</string>
+    <string name="place_search_placeholder">I really want to find…</string>
+    <string name="chip_time_label">Select Time</string>
+    <string name="chip_date_label">Select Date</string>
+    <string name="dialog_date_done">Done</string>
+    <string name="dialog_date_cancel">Cancel</string>
+    <string name="dialog_time_dismiss">Dismiss</string>
+    <string name="dialog_time_done">Done</string>
+    <string name="itinerary_show_details">Show details</string>
+    <string name="mode_walk">Walk</string>
+    <string name="mode_bike">Bike</string>
+    <string name="rental">Rental</string>
+    <string name="mode_car">Car</string>
+    <string name="mode_car_parking">Car Parking</string>
+    <string name="mode_car_dropoff">Car Dropoff</string>
+    <string name="mode_on_demand_mobility">On-Demand Mobility</string>
+    <string name="mode_flexible_transport">Flexible Transport</string>
+    <string name="mode_transit">Transit</string>
+    <string name="mode_tram">Tram</string>
+    <string name="mode_ferry">Ferry</string>
+    <string name="mode_airplane">Airplane</string>
+    <string name="mode_metro">Metro</string>
+    <string name="mode_bus">Bus</string>
+    <string name="mode_train">Train</string>
+    <string name="mode_cable_car">Cable Car</string>
+    <string name="mode_funicular">Funicular</string>
+    <string name="mode_aerial_lift">Aerial Lift</string>
+    <string name="mode_other">Other Transport Mode</string>
 </resources>

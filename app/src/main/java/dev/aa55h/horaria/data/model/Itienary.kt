@@ -2,6 +2,7 @@
 
 package dev.aa55h.horaria.data.model
 
+import androidx.annotation.StringRes
 import dev.aa55h.horaria.R
 
 /**
@@ -453,34 +454,35 @@ enum class Mode {
     /** Other/unspecified mode */
     OTHER;
 
-    fun pretty(): String {
+    @StringRes
+    fun pretty(): Int {
         return when (this) {
-            WALK -> "Walk"
-            BIKE -> "Bike"
-            RENTAL -> "Rental Vehicle"
-            CAR -> "Car"
-            CAR_PARKING -> "Car Parking"
-            CAR_DROPOFF -> "Car Dropoff"
-            ODM -> "On-Demand Mobility"
-            FLEX -> "Flexible Transport"
-            TRANSIT -> "Transit"
-            TRAM -> "Tram"
-            FERRY -> "Ferry"
-            AIRPLANE -> "Airplane"
+            WALK -> R.string.mode_walk
+            BIKE -> R.string.mode_bike
+            RENTAL -> R.string.rental
+            CAR -> R.string.mode_car
+            CAR_PARKING -> R.string.mode_car_parking
+            CAR_DROPOFF -> R.string.mode_car_dropoff
+            ODM -> R.string.mode_on_demand_mobility
+            FLEX -> R.string.mode_flexible_transport
+            TRANSIT -> R.string.mode_transit
+            TRAM -> R.string.mode_tram
+            FERRY -> R.string.mode_ferry
+            AIRPLANE -> R.string.mode_airplane
             SUBWAY,
-            METRO -> "Metro"
+            METRO -> R.string.mode_metro
             BUS,
-            COACH -> "Bus"
-            RAIL -> "Rail"
-            HIGHSPEED_RAIL -> "High-Speed Train"
-            LONG_DISTANCE -> "Long-Distance Train"
-            NIGHT_RAIL -> "Night Train"
-            REGIONAL_FAST_RAIL -> "Regional Fast Train"
-            REGIONAL_RAIL -> "Regional Train"
-            CABLE_CAR -> "Cable Car"
-            FUNICULAR -> "Funicular"
-            AREAL_LIFT -> "Aerial Lift"
-            OTHER -> "Other Transport Mode"
+            COACH -> R.string.mode_bus
+            HIGHSPEED_RAIL,
+            LONG_DISTANCE,
+            NIGHT_RAIL,
+            REGIONAL_FAST_RAIL,
+            REGIONAL_RAIL,
+            RAIL -> R.string.mode_train
+            CABLE_CAR -> R.string.mode_cable_car
+            FUNICULAR -> R.string.mode_funicular
+            AREAL_LIFT -> R.string.mode_aerial_lift
+            OTHER -> R.string.mode_other
         }
     }
 

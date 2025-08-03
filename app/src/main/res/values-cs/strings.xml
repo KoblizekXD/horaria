@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Horaria</string>
+    <string name="title_home">Domů</string>
+    <string name="title_search">Hledat</string>
+    <string name="title_search_results">Výsledky hledání</string>
+    <string name="from_placeholder">Odkud…</string>
+    <string name="to_placeholder">Do…</string>
+    <string name="search_button">Hledat</string>
+    <string name="search_button_error">Vyber odkud a kam se chceš dostat!</string>
+    <string name="place_search_placeholder">Opravdu chci najít…</string>
+    <string name="chip_time_label">Vybrat čas</string>
+    <string name="chip_date_label">Vybrat datum</string>
+    <string name="dialog_date_done">Hotovo</string>
+    <string name="dialog_date_cancel">Zrušit</string>
+    <string name="dialog_time_dismiss">Zrušit</string>
+    <string name="dialog_time_done">Hotovo</string>
+    <string name="itinerary_show_details">Podrobnosti</string>
+    <string name="mode_walk">Chůze</string>
+    <string name="mode_bike">Kolo</string>
+    <string name="rental">Vypůjčení</string>
+    <string name="mode_car">Auto</string>
+    <string name="mode_car_parking">Parkování auta</string>
+    <string name="mode_car_dropoff">Výstup z auta</string>
+    <string name="mode_on_demand_mobility">Doprava na vyžádání</string>
+    <string name="mode_flexible_transport">Flexibilní doprava</string>
+    <string name="mode_transit">Hromadná doprava</string>
+    <string name="mode_tram">Tramvaj</string>
+    <string name="mode_ferry">Přívoz</string>
+    <string name="mode_airplane">Letadlo</string>
+    <string name="mode_metro">Metro</string>
+    <string name="mode_bus">Autobus</string>
+    <string name="mode_train">Vlak</string>
+    <string name="mode_cable_car">Lanovka</string>
+    <string name="mode_funicular">Pozemní lanovka</string>
+    <string name="mode_aerial_lift">Visutá lanovka</string>
+    <string name="mode_other">Jiný způsob dopravy</string>
+
+</resources>

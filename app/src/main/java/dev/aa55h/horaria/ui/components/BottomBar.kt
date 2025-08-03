@@ -6,6 +6,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.navigator.Navigator
 import dev.aa55h.horaria.R
 import dev.aa55h.horaria.ui.screens.ScreenDetails
@@ -26,7 +27,7 @@ fun BottomBar(navigator: Navigator) {
                     )
                 },
                 label = {
-                    Text(text = screenDetails.title)
+                    Text(text = stringResource(screenDetails.title))
                 }
             )
         }

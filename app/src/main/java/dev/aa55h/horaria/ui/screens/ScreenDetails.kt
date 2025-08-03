@@ -10,23 +10,19 @@ import kotlin.reflect.KClass
 
 enum class ScreenDetails(
     val kClass: KClass<out Screen>,
-    val title: String,
+    val title: Int,
     val icon: Int? = null,
     val showTopBar: Boolean = true,
     val showBottomBar: Boolean = true,
 ) {
-    HOME(HomeScreen::class, "Home", icon = R.drawable.ic_home),
-    SEARCH(SearchScreen::class, "Search", icon = R.drawable.ic_search),
-    PLACE_SEARCH(PlaceSearchScreen::class, "Search", showTopBar = false, showBottomBar = false),
-    SEARCH_RESULT(SearchResultScreen::class, "Search Results", showTopBar = false);
+    HOME(HomeScreen::class, R.string.title_home, icon = R.drawable.ic_home),
+    SEARCH(SearchScreen::class, R.string.title_search, icon = R.drawable.ic_search),
+    PLACE_SEARCH(PlaceSearchScreen::class, R.string.title_search, showTopBar = false, showBottomBar = false),
+    SEARCH_RESULT(SearchResultScreen::class, R.string.title_search_results, showTopBar = false);
 
     companion object {
         fun fromKClass(kClass: KClass<out Screen>): ScreenDetails? {
             return entries.find { it.kClass == kClass }
-        }
-
-        fun fromTitle(title: String): ScreenDetails? {
-            return entries.find { it.title == title }
         }
 
         val onBottomBar = mapOf<ScreenDetails, () -> Screen>(

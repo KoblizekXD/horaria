@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import dev.aa55h.horaria.R
 import dev.aa55h.horaria.utils.formatted
 import java.time.LocalDate
@@ -26,7 +27,7 @@ fun TimeChip(onConfirm: (LocalTime) -> Unit, time: LocalTime?) {
             )
         },
         label = {
-            Text(time?.toString() ?: "Select Time")
+            Text(time?.toString() ?: stringResource(R.string.chip_time_label))
         }
     )
     if (showTime.value) {
@@ -56,7 +57,7 @@ fun DateChip(onConfirm: (LocalDate) -> Unit, date: LocalDate?) {
             )
         },
         label = {
-            Text(if (date == null) "Select Date" else date.formatted()!!)
+            Text(if (date == null) stringResource(R.string.chip_date_label) else date.formatted()!!)
         }
     )
     if (showDate.value) {

@@ -29,6 +29,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -119,7 +120,7 @@ fun ItineraryCard(
                             contentDescription = null,
                             modifier = Modifier.size(16.dp)
                         )
-                        Text(text = mode.pretty(), style = MaterialTheme.typography.bodySmall)
+                        Text(text = stringResource(mode.pretty()), style = MaterialTheme.typography.bodySmall)
                     }
                 }
             } else {
@@ -152,7 +153,7 @@ fun ItineraryCard(
                             contentDescription = null,
                             modifier = Modifier.size(16.dp)
                         )
-                        Text(text = leg.mode.pretty(), fontSize = 14.sp)
+                        Text(text = stringResource(leg.mode.pretty()), fontSize = 14.sp)
                         leg.routeShortName?.let {
                             SuggestionChip(
                                 onClick = {},
@@ -196,7 +197,7 @@ fun ItineraryCard(
             }
             TextButton(onClick = {}) {
                 Text(
-                    text = "Show details",
+                    text = stringResource(R.string.itinerary_show_details),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary
                 )

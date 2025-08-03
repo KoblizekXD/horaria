@@ -26,6 +26,7 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import dev.aa55h.horaria.R
 import dev.aa55h.horaria.data.model.SearchScreenSource
 import dev.aa55h.horaria.data.model.SimplePlaceDefinition
 import dev.aa55h.horaria.ui.components.DateChip
@@ -62,9 +63,8 @@ class SearchScreen: Screen {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             PlaceSearchInput(
-                screenModel = screenModel,
                 placeholder = {
-                    Text("From...")
+                    Text(context.getString(R.string.from_placeholder))
                 },
                 onClick = {
                     navigator.push(PlaceSearchScreen(SearchScreenSource.FROM, navigatorExtension))
@@ -73,9 +73,8 @@ class SearchScreen: Screen {
             )
 
             PlaceSearchInput(
-                screenModel = screenModel,
                 placeholder = {
-                    Text("To...")
+                    Text(context.getString(R.string.to_placeholder))
                 },
                 onClick = {
                     navigator.push(PlaceSearchScreen(SearchScreenSource.TO, navigatorExtension))
@@ -103,7 +102,7 @@ class SearchScreen: Screen {
             Button(onClick = {
                 if (screenModel.from == null || screenModel.to == null) {
                     Log.w("SearchScreen", "From or To place is not set")
-                    Toast.makeText(context, "Please select from and to places", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, context.getString(R.string.search_button_error), Toast.LENGTH_SHORT)
                         .show()
                     return@Button
                 }
@@ -116,14 +115,13 @@ class SearchScreen: Screen {
                     )
                 ))
             }, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Search")
+                Text(context.getString(R.string.search_button))
             }
         }
     }
 
     @Composable
     private fun PlaceSearchInput(
-        screenModel: SearchScreenModel,
         modifier: Modifier = Modifier,
         placeholder: @Composable () -> Unit = {},
         icon: @Composable () -> Unit = {},

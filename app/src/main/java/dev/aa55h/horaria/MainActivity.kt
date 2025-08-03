@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                             ScreenDetails.fromKClass(it.lastItem::class)?.let { details ->
                                 if (details.showTopBar) {
                                     GenericTopBar(
-                                        title = details.title,
+                                        title = this.getString(details.title),
                                         navigator = it,
                                         displayBackArrow = false
                                     )
