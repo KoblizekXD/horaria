@@ -37,4 +37,8 @@
     <string name="type_place">Place</string>
     <string name="type_address">Address</string>
     <string name="type_stop">Stop</string>
+    <string name="itinerary_card_includes">Includes: </string>
+    <string name="itinerary_card_no">no</string>
+    <string name="itinerary_card_transfers">transfer</string>
+    <string name="itinerary_card_transfers_plural">s</string>
 </resources>

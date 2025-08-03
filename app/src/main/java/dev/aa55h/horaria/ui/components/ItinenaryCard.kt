@@ -99,7 +99,9 @@ fun ItineraryCard(
                     )
                 }
                 Text(
-                    text = "${if (itinerary.transfers == 0) "no" else itinerary.transfers} transfer${if (itinerary.transfers == 1) "" else "s"}, "
+                    text = "${if (itinerary.transfers == 0) stringResource(R.string.itinerary_card_no) else itinerary.transfers} "
+                            + "${stringResource(R.string.itinerary_card_transfers)}${if (itinerary.transfers == 1) "" 
+                    else stringResource(R.string.itinerary_card_transfers_plural)}, "
                             + formatDuration(itinerary.duration),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -109,7 +111,7 @@ fun ItineraryCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
-                    Text("Includes: ",
+                    Text(stringResource(R.string.itinerary_card_includes),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.SemiBold

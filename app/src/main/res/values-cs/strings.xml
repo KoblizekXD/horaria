@@ -38,4 +38,8 @@
     <string name="type_place">Místo</string>
     <string name="type_address">Adresa</string>
     <string name="type_stop">Zastávka</string>
+    <string name="itinerary_card_includes">Zahrnuje: </string>
+    <string name="itinerary_card_no">žádné</string>
+    <string name="itinerary_card_transfers">přestup</string>
+    <string name="itinerary_card_transfers_plural">y</string>
 </resources>
